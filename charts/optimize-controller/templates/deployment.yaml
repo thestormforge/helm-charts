@@ -1,61 +1,53 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "optimize-controller.fullname" . }}
   labels:
-    {{- include "optimize-controller.labels" . | nindent 4 }}
+    app.kubernetes.io/instance: '{{ .Release.Name }}'
+    app.kubernetes.io/managed-by: '{{ .Release.Service }}'
+    app.kubernetes.io/name: optimize
+    app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
+    control-plane: controller-manager
+    helm.sh/chart: '{{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_"
+      | trunc 63 | trimSuffix "-" }}'
+  name: '{{ .Release.Name }}-controller-manager'
+  namespace: '{{ .Release.Namespace }}'
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
+  replicas: 1
   selector:
     matchLabels:
-      {{- include "optimize-controller.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/instance: '{{ .Release.Name }}'
+      app.kubernetes.io/name: optimize
+      control-plane: controller-manager
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        stormforge.io/secretHash: '{{ include (print $.Template.BasePath "/secret.yaml")
+          . | sha256sum }}'
       labels:
-        {{- include "optimize-controller.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/instance: '{{ .Release.Name }}'
+        app.kubernetes.io/name: optimize
+        app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
+        control-plane: controller-manager
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "optimize-controller.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+      - envFrom:
+        - secretRef:
+            name: '{{ .Release.Name }}-manager'
+        image: '{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion
+          }}'
+        imagePullPolicy: '{{ .Values.image.pullPolicy }}'
+        name: manager
+        resources:
+          limits:
+            cpu: 100m
+            memory: 250Mi
+          requests:
+            cpu: 100m
+            memory: 250Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsGroup: 65534
+          runAsNonRoot: true
+          runAsUser: 65534
+      terminationGracePeriodSeconds: 10

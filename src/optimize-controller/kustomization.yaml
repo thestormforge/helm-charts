@@ -1,0 +1,127 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- resources.yaml
+
+# This is all just a hack to get Kustomize to inject Helm placeholders for us.
+namespace: '{{ .Release.Namespace }}'
+patches:
+
+# Update the deployment
+- patch: |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: optimize-controller-manager
+      namespace: stormforge-system
+    spec:
+      selector:
+        matchLabels:
+          app.kubernetes.io/instance: '{{ .Release.Name }}'
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
+            app.kubernetes.io/instance: '{{ .Release.Name }}'
+          annotations:
+            stormforge.io/secretHash: '{{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}'
+        spec:
+          containers:
+          - name: manager
+            image: '{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}'
+            imagePullPolicy: '{{ .Values.image.pullPolicy }}'
+            envFrom:
+            - secretRef:
+                name: '{{ .Release.Name }}-manager'
+
+# Update the secret
+- patch: |-
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: optimize-manager
+      namespace: stormforge-system
+    data:
+      STORMFORGE_AUTHORIZATION_CLIENT_ID: '{{ .Values.authorization.clientID | b64enc }}'
+      STORMFORGE_AUTHORIZATION_CLIENT_SECRET: '{{ .Values.authorization.clientSecret | b64enc }}'
+
+# Add Helm labels to all resources
+- target:
+    kind: ".*"
+  patch: |-
+    - op: replace
+      path: /metadata/labels/app.kubernetes.io~1version
+      value: '{{ .Chart.AppVersion }}'
+    - op: add
+      path: /metadata/labels/app.kubernetes.io~1instance
+      value: '{{ .Release.Name }}'
+    - op: add
+      path: /metadata/labels/app.kubernetes.io~1managed-by
+      value: '{{ .Release.Service }}'
+    - op: add
+      path: /metadata/labels/helm.sh~1chart
+      value: '{{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}'
+
+# There is no good way to match/replace names using a pattern
+- target:
+    kind: Deployment
+    name: "optimize-controller-manager"
+  patch: |-
+    - op: replace
+      path: /metadata/name
+      value: '{{ .Release.Name }}-controller-manager'
+  options:
+    allowNameChange: true
+- target:
+    kind: Secret
+    name: "optimize-manager"
+  patch: |-
+    - op: replace
+      path: /metadata/name
+      value: '{{ .Release.Name }}-manager'
+  options:
+    allowNameChange: true
+- target:
+    name: "optimize-manager-role"
+  patch: |-
+    - op: replace
+      path: /metadata/name
+      value: '{{ .Release.Name }}-manager-role'
+    - op: remove
+      path: /metadata/creationTimestamp
+  options:
+    allowNameChange: true
+- target:
+    name: "optimize-manager-rolebinding"
+  patch: |-
+    - op: replace
+      path: /metadata/name
+      value: '{{ .Release.Name }}-manager-rolebinding'
+  options:
+    allowNameChange: true
+- target:
+    name: "optimize-patching-role"
+  patch: |-
+    - op: replace
+      path: /metadata/name
+      value: '{{ .Release.Name }}-patching-role'
+  options:
+    allowNameChange: true
+- target:
+    name: "optimize-patching-rolebinding"
+  patch: |-
+    - op: replace
+      path: /metadata/name
+      value: '{{ .Release.Name }}-patching-rolebinding'
+  options:
+    allowNameChange: true
+
+# Clean up for controller-tools
+- target:
+    kind: "CustomResourceDefinition"
+  patch: |-
+    - op: remove
+      path: /metadata/creationTimestamp
+    - op: remove
+      path: /status
