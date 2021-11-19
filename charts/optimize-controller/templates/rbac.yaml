@@ -94,7 +94,8 @@ subjects:
 - kind: ServiceAccount
   name: default
   namespace: '{{ .Release.Namespace }}'
-{{- if .Values.rbac.bootstrapPermissions -}}
+{{- if .Values.rbac.bootstrapPermissions }}
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
