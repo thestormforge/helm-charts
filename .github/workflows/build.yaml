@@ -1,0 +1,39 @@
+name: Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: Optimize Controller image name
+        required: false
+        default: thestormforge/optimize-controller
+      tag:
+        description: Optimize Controller image tag
+        required: false
+        default: latest
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          # Need to use a PAT so this will trigger the release action
+          token: ${{ secrets.BMASTERS_TOKEN }}
+      - name: Build Chart
+        env:
+          IMAGE: ${{ github.event.inputs.image }}
+          IMAGE_TAG: ${{ github.event.inputs.tag }}
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
+          GIT_AUTHOR_NAME: ${{ github.actor }}
+          GIT_AUTHOR_EMAIL: ${{ github.actor }}@users.noreply.github.com
+        run: |-
+          IMAGE_TAG="${IMAGE_TAG#v}"
+          ./build.sh
+          git commit -a \
+            -m "Build chart using '${IMAGE}:${IMAGE_TAG}'" \
+            -m "Digest: $(docker images --no-trunc -q ${IMAGE}:${IMAGE_TAG})" \
+            && git push
+
