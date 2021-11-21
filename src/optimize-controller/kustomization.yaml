@@ -48,7 +48,8 @@ patches:
 
 # Add Helm labels to all resources
 - target:
-    kind: ".*"
+    # FIXME: This will break when the CRD goes to v1...
+    version: "v1"
   patch: |-
     - op: replace
       path: /metadata/labels/app.kubernetes.io~1version
@@ -117,10 +118,13 @@ patches:
   options:
     allowNameChange: true
 
-# Clean up for controller-tools
+# Clean up the CRD (which CANNOT use templates!)
 - target:
     kind: "CustomResourceDefinition"
   patch: |-
+    - op: add
+      path: /metadata/labels/app.kubernetes.io~1managed-by
+      value: 'Helm'
     - op: remove
       path: /metadata/creationTimestamp
     - op: remove

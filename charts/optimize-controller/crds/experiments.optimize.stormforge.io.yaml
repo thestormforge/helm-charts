@@ -4,12 +4,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.2.2
   labels:
-    app.kubernetes.io/instance: '{{ .Release.Name }}'
-    app.kubernetes.io/managed-by: '{{ .Release.Service }}'
+    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: optimize
-    app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
-    helm.sh/chart: '{{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_"
-      | trunc 63 | trimSuffix "-" }}'
+    app.kubernetes.io/version: v2.0.3
   name: experiments.optimize.stormforge.io
 spec:
   additionalPrinterColumns:
