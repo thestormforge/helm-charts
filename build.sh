@@ -25,7 +25,7 @@ CHART_VERSION="${CHART_VERSION#v}"
 
 # Helper functions
 hungryCat() { cat "$1" && rm "$1"; }
-removeNamespace() { sed -i "" "/namespace: '{{ .Release.Namespace }}'/d" "$1"; }
+removeNamespace() { sed -e "/namespace: '{{ .Release.Namespace }}'/d" -i "" "$1"; }
 
 
 # Create a build area and populate it with all the manifests we need
