@@ -1,11 +1,11 @@
 apiVersion: v2
 name: optimize-controller
-version: 2.0.3
+version: 2.0.4
 description: Kubernetes Performance Testing and resource optimization for flawless app performance and cloud efficiency without manual tuning.
 type: application
 home: https://www.stormforge.io/
 sources:
 - https://github.com/thestormforge/optimize-controller
-- git@github.com:thestormforge/helm-charts.git
+- https://github.com/thestormforge/helm-charts
 icon: https://app.stormforge.io/img/logo.png
-appVersion: "v2.0.3"
+appVersion: "v2.0.4"
