@@ -23,11 +23,6 @@ CHART_VERSION="$(dockerlabel "org.opencontainers.image.version")"
 CHART_VERSION="${CHART_VERSION#v}"
 
 
-# Helper functions
-hungryCat() { cat "$1" && rm "$1"; }
-removeNamespace() { sed -e "/namespace: '{{ .Release.Namespace }}'/d" -i "" "$1"; }
-
-
 # Create a build area and populate it with all the manifests we need
 BUILD_DIR="$(git rev-parse --show-toplevel)/build"
 rm -rf "${BUILD_DIR}" && mkdir -p "${BUILD_DIR}"
@@ -72,31 +67,28 @@ for f in "${BUILD_DIR}/"*_*_customresourcedefinition_*; do mv "${f}" "${CRDS_DIR
 
 # templates/deployment.yaml
 DEPLOYMENT_TEMPLATE="${CHART_DIR}/${CHART_NAME}/templates/deployment.yaml"
-mv "${BUILD_DIR}/apps_v1_deployment_{{ .release.name }}-controller-manager.yaml" "${DEPLOYMENT_TEMPLATE}"
-removeNamespace "${DEPLOYMENT_TEMPLATE}"
+cat "${BUILD_DIR}/apps_v1_deployment_{{ .release.name }}-controller-manager.yaml" \
+	| sed -e "/namespace: '{{ .Release.Namespace }}'/d" > "${DEPLOYMENT_TEMPLATE}"
 
 # templates/secret.yaml
 SECRET_TEMPLATE="${CHART_DIR}/${CHART_NAME}/templates/secret.yaml"
-mv "${BUILD_DIR}/v1_secret_{{ .release.name }}-manager.yaml" "${SECRET_TEMPLATE}"
-removeNamespace "${SECRET_TEMPLATE}"
+cat "${BUILD_DIR}/v1_secret_{{ .release.name }}-manager.yaml" \
+	| sed -e "/namespace: '{{ .Release.Namespace }}'/d" > "${SECRET_TEMPLATE}"
 
 # templates/rbac.yaml
 RBAC_TEMPLATE="${CHART_DIR}/${CHART_NAME}/templates/rbac.yaml"
 echo "{{- if .Values.rbac.create -}}" > "${RBAC_TEMPLATE}"
-hungryCat "${BUILD_DIR}/rbac.authorization.k8s.io_v1_clusterrole_{{ .release.name }}-manager-role.yaml" >> "${RBAC_TEMPLATE}"
+cat "${BUILD_DIR}/rbac.authorization.k8s.io_v1_clusterrole_{{ .release.name }}-manager-role.yaml" >> "${RBAC_TEMPLATE}"
 echo "---" >> "${RBAC_TEMPLATE}"
-hungryCat "${BUILD_DIR}/rbac.authorization.k8s.io_v1_clusterrolebinding_{{ .release.name }}-manager-rolebinding.yaml" >> "${RBAC_TEMPLATE}"
+cat "${BUILD_DIR}/rbac.authorization.k8s.io_v1_clusterrolebinding_{{ .release.name }}-manager-rolebinding.yaml" >> "${RBAC_TEMPLATE}"
 echo "{{- if .Values.rbac.bootstrapPermissions }}" >> "${RBAC_TEMPLATE}"
 echo "---" >> "${RBAC_TEMPLATE}"
-hungryCat "${BUILD_DIR}/rbac.authorization.k8s.io_v1_clusterrole_{{ .release.name }}-patching-role.yaml" >> "${RBAC_TEMPLATE}"
+cat "${BUILD_DIR}/rbac.authorization.k8s.io_v1_clusterrole_{{ .release.name }}-patching-role.yaml" >> "${RBAC_TEMPLATE}"
 echo "---" >> "${RBAC_TEMPLATE}"
-hungryCat "${BUILD_DIR}/rbac.authorization.k8s.io_v1_clusterrolebinding_{{ .release.name }}-patching-rolebinding.yaml" >> "${RBAC_TEMPLATE}"
+cat "${BUILD_DIR}/rbac.authorization.k8s.io_v1_clusterrolebinding_{{ .release.name }}-patching-rolebinding.yaml" >> "${RBAC_TEMPLATE}"
 echo "{{- end -}}" >> "${RBAC_TEMPLATE}"
 echo "{{- end -}}" >> "${RBAC_TEMPLATE}"
 
 
 # Clean up (fail if we didn't explicitly consume everything)
-rm "${BUILD_DIR}/kustomization.yaml"
-rm "${BUILD_DIR}/resources.yaml"
-rm "${BUILD_DIR}/v1_namespace_{{ .release.namespace }}.yaml"
-rmdir "${BUILD_DIR}"
+rm -rf "${BUILD_DIR}"
