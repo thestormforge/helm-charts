@@ -90,5 +90,5 @@ echo "{{- end -}}" >> "${RBAC_TEMPLATE}"
 echo "{{- end -}}" >> "${RBAC_TEMPLATE}"
 
 
-# Clean up (fail if we didn't explicitly consume everything)
+# Clean up
 rm -rf "${BUILD_DIR}"

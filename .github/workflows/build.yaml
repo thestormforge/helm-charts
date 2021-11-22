@@ -1,16 +1,7 @@
 name: Build
 
 on:
-  workflow_dispatch:
-    inputs:
-      image:
-        description: Optimize Controller image name
-        required: false
-        default: thestormforge/optimize-controller
-      tag:
-        description: Optimize Controller image tag
-        required: false
-        default: latest
+  workflow_dispatch: {}
 
 jobs:
   build:
@@ -25,15 +16,15 @@ jobs:
         env:
           IMAGE: ${{ github.event.inputs.image }}
           IMAGE_TAG: ${{ github.event.inputs.tag }}
-          GIT_COMMITTER_NAME: github-actions[bot]
-          GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
+          GIT_COMMITTER_NAME: Butch Masters
+          GIT_COMMITTER_EMAIL: b-masters@users.noreply.github.com
           GIT_AUTHOR_NAME: ${{ github.actor }}
           GIT_AUTHOR_EMAIL: ${{ github.actor }}@users.noreply.github.com
         run: |-
           IMAGE_TAG="${IMAGE_TAG#v}"
           ./build.sh
           git commit -a \
-            -m "Build chart using '${IMAGE}:${IMAGE_TAG}'" \
-            -m "Digest: $(docker images --no-trunc -q ${IMAGE}:${IMAGE_TAG})" \
+            -m "Update chart from image" \
+            -m "${IMAGE}@$(docker images --no-trunc -q ${IMAGE}:${IMAGE_TAG})" \
             && git push
 
