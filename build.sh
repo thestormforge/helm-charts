@@ -92,3 +92,10 @@ echo "{{- end -}}" >> "${RBAC_TEMPLATE}"
 
 # Clean up
 rm -rf "${BUILD_DIR}"
+
+
+# Print a summary (NOTE: if we exit with 0 then this will also be the commit message!)
+echo "Built chart ${CHART_NAME}-${CHART_VERSION} from tag '${IMAGE_TAG}'"
+echo
+echo "${IMAGE_REPO}@$(docker images --no-trunc -q ${IMAGE_REPO}:${IMAGE_TAG})"
+echo "${CLI_IMAGE_REPO}@$(docker images --no-trunc -q ${CLI_IMAGE_REPO}:${IMAGE_TAG})"

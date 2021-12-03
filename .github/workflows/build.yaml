@@ -1,7 +1,6 @@
 name: Build
 
-on:
-  workflow_dispatch: {}
+on: workflow_dispatch
 
 jobs:
   build:
@@ -14,18 +13,12 @@ jobs:
           token: ${{ secrets.BMASTERS_TOKEN }}
       - name: Build Chart
         env:
-          IMAGE: ${{ github.event.inputs.image }}
-          IMAGE_TAG: ${{ github.event.inputs.tag }}
           GIT_COMMITTER_NAME: Butch Masters
           GIT_COMMITTER_EMAIL: b-masters@users.noreply.github.com
           GIT_AUTHOR_NAME: ${{ github.actor }}
           GIT_AUTHOR_EMAIL: ${{ github.actor }}@users.noreply.github.com
         run: |-
-          IMAGE_TAG="${IMAGE_TAG#v}"
-          ./build.sh
-          if git commit -a \
-            -m "Update chart from image" \
-            -m "${IMAGE}@$(docker images --no-trunc -q ${IMAGE}:${IMAGE_TAG})" ; then
+          if git commit -aF <(./build.sh) ; then
             git push
           else
             echo "::warning title=No changes::There were no changes made by this build."
