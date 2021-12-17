@@ -1,6 +1,11 @@
 name: Build
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: The Optimize Controller image tag
+        default: 'latest'
 
 jobs:
   build:
@@ -13,6 +18,7 @@ jobs:
           token: ${{ secrets.BMASTERS_TOKEN }}
       - name: Build Chart
         env:
+          IMAGE_TAG: ${{ github.event.inputs.image_tag }}
           GIT_COMMITTER_NAME: Butch Masters
           GIT_COMMITTER_EMAIL: b-masters@users.noreply.github.com
           GIT_AUTHOR_NAME: ${{ github.actor }}
