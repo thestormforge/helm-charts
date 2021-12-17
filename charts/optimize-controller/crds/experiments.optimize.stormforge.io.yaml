@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: optimize
-    app.kubernetes.io/version: v2.0.5
+    app.kubernetes.io/version: v2.0.6
   name: experiments.optimize.stormforge.io
 spec:
   additionalPrinterColumns:
@@ -3057,6 +3057,62 @@ spec:
                             items:
                               type: string
                             type: array
+                          env:
+                            items:
+                              properties:
+                                name:
+                                  type: string
+                                value:
+                                  type: string
+                                valueFrom:
+                                  properties:
+                                    configMapKeyRef:
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      required:
+                                      - key
+                                      type: object
+                                    fieldRef:
+                                      properties:
+                                        apiVersion:
+                                          type: string
+                                        fieldPath:
+                                          type: string
+                                      required:
+                                      - fieldPath
+                                      type: object
+                                    resourceFieldRef:
+                                      properties:
+                                        containerName:
+                                          type: string
+                                        divisor:
+                                          type: string
+                                        resource:
+                                          type: string
+                                      required:
+                                      - resource
+                                      type: object
+                                    secretKeyRef:
+                                      properties:
+                                        key:
+                                          type: string
+                                        name:
+                                          type: string
+                                        optional:
+                                          type: boolean
+                                      required:
+                                      - key
+                                      type: object
+                                  type: object
+                              required:
+                              - name
+                              type: object
+                            type: array
                           helmChart:
                             type: string
                           helmChartVersion:
@@ -3100,6 +3156,10 @@ spec:
                             type: array
                           image:
                             type: string
+                          labels:
+                            additionalProperties:
+                              type: string
+                            type: object
                           name:
                             type: string
                           skipCreate:
