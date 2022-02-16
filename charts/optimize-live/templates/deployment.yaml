@@ -20,9 +20,7 @@ spec:
         {{- include "optimize-live.selectorLabels" . | nindent 8 }}
     spec:
       imagePullSecrets:
-      {{- with .Values.imagePullSecrets }}
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+      - {{ include "optimize-live.fullname" . }}-docker
       serviceAccountName: {{ include "optimize-live.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
