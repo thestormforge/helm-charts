@@ -76,4 +76,18 @@ entries:
     urls:
     - https://github.com/thestormforge/helm-charts/releases/download/optimize-controller-2.0.3/optimize-controller-2.0.3.tgz
     version: 2.0.3
+  optimize-live:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2022-02-16T19:17:07.894427966Z"
+    description: A Helm chart for Kubernetes
+    digest: aea26c9c4ec17b8f1dc1f004ec159946b58858a90114dc422369b5de0a259474
+    maintainers:
+    - email: techsupport@stormforge.io
+      name: StormForge Developers
+    name: optimize-live
+    type: application
+    urls:
+    - https://github.com/thestormforge/helm-charts/releases/download/optimize-live-0.1.0/optimize-live-0.1.0.tgz
+    version: 0.1.0
 generated: "2021-11-21T16:19:40.71931458Z"
