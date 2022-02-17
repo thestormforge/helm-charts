@@ -36,6 +36,14 @@ spec:
             value: {{ include "optimize-live.fullname" . }}
           - name: METRICS_URL
             value: {{ .Values.metricsURL }}
+          - name: COMPONENT_TSDB_IMAGE
+            value: {{ .Values.component.image.tsdb.repository }}:{{ .Values.component.image.tsdb.tag }}
+          - name: COMPONENT_APPLIER_IMAGE
+            value: {{ .Values.component.image.applier.repository }}:{{ .Values.component.image.applier.tag }}
+          - name: COMPONENT_RECOMMENDER_IMAGE
+            value: {{ .Values.component.image.recommender.repository }}:{{ .Values.component.image.recommender.tag }}
+          - name: COMPONENT_GRAFANA_IMAGE
+            value: {{ .Values.component.image.grafana.repository }}:{{ .Values.component.image.grafana.tag }}
           - name: CONTROLLER_NAMESPACE
             valueFrom:
               fieldRef:
@@ -50,8 +58,8 @@ spec:
                 fieldPath: spec.serviceAccountName
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: {{ .Values.component.image.controller.repository }}:{{ .Values.component.image.controller.tag }}
+          imagePullPolicy: {{ .Values.component.image.controller.pullPolicy }}
           livenessProbe:
             httpGet:
               path: /healthz

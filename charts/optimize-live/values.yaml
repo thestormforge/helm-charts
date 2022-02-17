@@ -4,11 +4,28 @@
 
 replicaCount: 1
 
-image:
-  repository: registry.stormforge.io/optimize-live/controller
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: latest
+component:
+  image:
+    controller:
+      repository: registry.stormforge.io/optimize-live/controller
+      pullPolicy: IfNotPresent
+      tag: latest
+    tsdb:
+      repository: registry.stormforge.io/optimize-live/tsdb
+      pullPolicy: IfNotPresent
+      tag: latest
+    applier:
+      repository: registry.stormforge.io/optimize-live/applier
+      pullPolicy: IfNotPresent
+      tag: latest
+    recommender:
+      repository: registry.stormforge.io/optimize-live/recommender
+      pullPolicy: IfNotPresent
+      tag: latest
+    grafana:
+      repository: grafana/grafana-oss
+      pullPolicy: IfNotPresent
+      tag: latest
 
 imagePullSecrets: []
 nameOverride: ""
