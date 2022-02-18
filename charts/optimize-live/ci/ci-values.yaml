@@ -2,3 +2,6 @@ component:
   image:
     controller:
       repository: grafana/grafana-oss
+
+livenessProbe: null
+readinessProbe: null
