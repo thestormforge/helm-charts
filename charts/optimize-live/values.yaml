@@ -51,13 +51,13 @@ rbac:
 
 imageCredentials:
   create: true
-  password: ""
-  registry: ""
-  username: ""
+  password: password
+  registry: registry.stormforge.io
+  username: username
 
 authorization:
-  clientID: ""
-  clientSecret: ""
+  clientID: id
+  clientSecret: secret
   serverIdentifier: https://api.stormforge.io/
   serverIssuer: https://api.stormforge.io/
   tokenEndpoint: https://auth.stormforge.io/oauth/token
