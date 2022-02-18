@@ -4,11 +4,28 @@
 
 replicaCount: 1
 
-image:
-  repository: registry.stormforge.io/optimize-live/controller
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: latest
+component:
+  image:
+    controller:
+      repository: registry.stormforge.io/optimize-live/controller
+      pullPolicy: IfNotPresent
+      tag: latest
+    tsdb:
+      repository: registry.stormforge.io/optimize-live/tsdb
+      pullPolicy: IfNotPresent
+      tag: latest
+    applier:
+      repository: registry.stormforge.io/optimize-live/applier
+      pullPolicy: IfNotPresent
+      tag: latest
+    recommender:
+      repository: registry.stormforge.io/optimize-live/recommender
+      pullPolicy: IfNotPresent
+      tag: latest
+    grafana:
+      repository: grafana/grafana-oss
+      pullPolicy: IfNotPresent
+      tag: latest
 
 imagePullSecrets: []
 nameOverride: ""
@@ -34,13 +51,13 @@ rbac:
 
 imageCredentials:
   create: true
-  password: ""
-  registry: ""
-  username: ""
+  password: password
+  registry: registry.stormforge.io
+  username: username
 
 authorization:
-  clientID: ""
-  clientSecret: ""
+  clientID: id
+  clientSecret: secret
   serverIdentifier: https://api.stormforge.io/
   serverIssuer: https://api.stormforge.io/
   tokenEndpoint: https://auth.stormforge.io/oauth/token
@@ -71,3 +88,17 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: 8081
+  initialDelaySeconds: 15
+  periodSeconds: 20
+
+readinessProbe:
+  httpGet:
+    path: /readyz
+    port: 8081
+  initialDelaySeconds: 5
+  periodSeconds: 10
