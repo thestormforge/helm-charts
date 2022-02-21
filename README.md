@@ -13,8 +13,8 @@ stormforge` to see the charts.
 
 To install the `optimize-controller` chart:
 
-    helm install optimize stormforge/optimize-controller --namespace stormforge-system --create namespace
+    helm install my-optimize-pro stormforge/optimize-controller --namespace stormforge-system --create namespace
 
 To uninstall the chart:
 
-    helm delete my-optimize-controller
+    helm delete my-optimize-pro
