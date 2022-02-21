@@ -18,6 +18,7 @@ spec:
       {{- end }}
       labels:
         {{- include "optimize-live.selectorLabels" . | nindent 8 }}
+        helm.sh/chart-version: {{ .Chart.Version }}
     spec:
       imagePullSecrets:
       - name: {{ include "optimize-live.fullname" . }}-docker
@@ -56,6 +57,10 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: spec.serviceAccountName
+          - name: CHART_VERSION
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['helm.sh/chart-version']
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ .Values.component.image.controller.repository }}:{{ .Values.component.image.controller.tag }}
