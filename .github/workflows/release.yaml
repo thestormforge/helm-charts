@@ -23,3 +23,13 @@ jobs:
         uses: helm/chart-releaser-action@v1.1.0
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Push to StormForge Registry
+        env:
+          HELM_REPO_USERNAME: "robot$thestormforge"
+          HELM_REPO_PASSWORD: "${{ secrets.REGISTRY_TOKEN }}"
+        run: |
+          helm plugin install https://github.com/chartmuseum/helm-push
+          helm repo add stormforge https://registry.stormforge.io/chartrepo/library/
+          find ".cr-release-packages" -name "*.tgz" \
+            -execdir helm cm-push "{}" "stormforge" \;

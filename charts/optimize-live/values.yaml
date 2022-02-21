@@ -50,17 +50,17 @@ rbac:
     name: ""
 
 imageCredentials:
-  create: true
-  password: password
   registry: registry.stormforge.io
   username: username
+  password: password
+
+stormforge:
+  address: https://api.stormforge.io/
 
 authorization:
+  issuer: https://api.stormforge.io/
   clientID: id
   clientSecret: secret
-  serverIdentifier: https://api.stormforge.io/
-  serverIssuer: https://api.stormforge.io/
-  tokenEndpoint: https://auth.stormforge.io/oauth/token
 
 metricsURL: http://prometheus:9090
 
@@ -70,6 +70,8 @@ podSecurityContext: {}
 
 securityContext:
   runAsNonRoot: true
+
+extraEnvVars: []
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
