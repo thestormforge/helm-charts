@@ -483,6 +483,9 @@ spec:
                 description: Individual component configuration
                 items:
                   properties:
+                    config:
+                      description: Additional per component configuration.
+                      type: string
                     enabled:
                       type: boolean
                     image:
@@ -502,7 +505,6 @@ spec:
                   - enabled
                   - name
                   type: object
-                  x-kubernetes-preserve-unknown-fields: true
                 type: array
               env:
                 description: Global Env to set on every component
