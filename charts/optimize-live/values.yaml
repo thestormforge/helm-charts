@@ -9,23 +9,23 @@ component:
     controller:
       repository: registry.stormforge.io/optimize-live/controller
       pullPolicy: IfNotPresent
-      tag: latest
+      tag: 0.0.12
     tsdb:
       repository: registry.stormforge.io/optimize-live/tsdb
       pullPolicy: IfNotPresent
-      tag: latest
+      tag: 0.0.6
     applier:
       repository: registry.stormforge.io/optimize-live/applier
       pullPolicy: IfNotPresent
-      tag: latest
+      tag: 0.0.4
     recommender:
       repository: registry.stormforge.io/optimize-live/recommender
       pullPolicy: IfNotPresent
-      tag: latest
+      tag: 0.1.1
     grafana:
       repository: grafana/grafana-oss
       pullPolicy: IfNotPresent
-      tag: latest
+      tag: 8.4.1
 
 imagePullSecrets: []
 nameOverride: ""

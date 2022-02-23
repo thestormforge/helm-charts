@@ -2,6 +2,7 @@ component:
   image:
     controller:
       repository: grafana/grafana-oss
+      tag: latest
 
 livenessProbe: null
 readinessProbe: null
