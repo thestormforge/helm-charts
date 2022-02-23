@@ -9,7 +9,7 @@ component:
     controller:
       repository: registry.stormforge.io/optimize-live/controller
       pullPolicy: IfNotPresent
-      tag: 0.0.11
+      tag: 0.0.12
     tsdb:
       repository: registry.stormforge.io/optimize-live/tsdb
       pullPolicy: IfNotPresent
@@ -25,7 +25,7 @@ component:
     grafana:
       repository: grafana/grafana-oss
       pullPolicy: IfNotPresent
-      tag: latest
+      tag: 8.4.1
 
 imagePullSecrets: []
 nameOverride: ""
