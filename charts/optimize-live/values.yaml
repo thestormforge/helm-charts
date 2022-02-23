@@ -21,7 +21,7 @@ component:
     recommender:
       repository: registry.stormforge.io/optimize-live/recommender
       pullPolicy: IfNotPresent
-      tag: latest
+      tag: 0.1.1
     grafana:
       repository: grafana/grafana-oss
       pullPolicy: IfNotPresent
