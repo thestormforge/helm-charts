@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: optimize
-    app.kubernetes.io/version: v2.0.7
+    app.kubernetes.io/version: v2.0.8
   name: trials.optimize.stormforge.io
 spec:
   additionalPrinterColumns:
