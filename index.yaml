@@ -94,6 +94,20 @@ entries:
   optimize-live:
   - apiVersion: v2
     appVersion: 0.0.3
+    created: "2022-02-23T05:18:59.950190372Z"
+    description: A Helm chart for Kubernetes
+    digest: bac1ffc0f0a0b71b8aef0c85ae0096621039de86c27b2f3dc1d53de1e2823ce5
+    home: https://www.stormforge.io/
+    icon: https://app.stormforge.io/img/logo.png
+    maintainers:
+    - name: grambot
+    name: optimize-live
+    type: application
+    urls:
+    - https://github.com/thestormforge/helm-charts/releases/download/optimize-live-0.1.6/optimize-live-0.1.6.tgz
+    version: 0.1.6
+  - apiVersion: v2
+    appVersion: 0.0.3
     created: "2022-02-21T22:14:34.507642796Z"
     description: A Helm chart for Kubernetes
     digest: 1196132960b495c4ec7661eaeabbf1d94e377343f8133ea2c6daf3fada24cd52
