@@ -10,6 +10,8 @@ spec:
   selector:
     matchLabels:
       {{- include "optimize-live.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Replace
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,7 +21,9 @@ spec:
       labels:
         {{- include "optimize-live.selectorLabels" . | nindent 8 }}
         helm.sh/chart-version: {{ .Chart.Version }}
+        configChecksum: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
     spec:
+      enableServiceLinks: false
       imagePullSecrets:
       - name: {{ include "optimize-live.fullname" . }}-docker
       serviceAccountName: {{ include "optimize-live.serviceAccountName" . }}
