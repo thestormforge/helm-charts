@@ -39,8 +39,24 @@ spec:
             value: {{ include "optimize-live.fullname" . }}-docker
           - name: SF_CREDS_SECRET_NAME
             value: {{ include "optimize-live.fullname" . }}
+{{- if .Values.metricsURL }}
+{{- if (ne "" .Values.metricsURL) }}
           - name: METRICS_URL
             value: {{ .Values.metricsURL }}
+{{- end }}
+{{- end }}
+{{- if .Values.storageClass }}
+{{- if (ne "" .Values.storageClass) }}
+          - name: TSDB_STORAGE_CLASS_NAME
+            value: {{ .Values.storageClass }}
+{{- end }}
+{{- end }}
+{{- if .Values.storageClass }}
+{{- if (ne "" .Values.pvcSize) }}
+          - name: TSDB_PVC_SIZE
+            value: {{ .Values.pvcSize }}
+{{- end }}
+{{- end }}
           - name: COMPONENT_TSDB_IMAGE
             value: {{ .Values.component.image.tsdb.repository }}:{{ .Values.component.image.tsdb.tag }}
           - name: COMPONENT_APPLIER_IMAGE

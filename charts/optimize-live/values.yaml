@@ -9,11 +9,11 @@ component:
     controller:
       repository: registry.stormforge.io/optimize-live/controller
       pullPolicy: IfNotPresent
-      tag: 0.0.12
+      tag: 0.0.14-rc13
     tsdb:
       repository: registry.stormforge.io/optimize-live/tsdb
       pullPolicy: IfNotPresent
-      tag: 0.0.6
+      tag: 0.0.8-rc17
     applier:
       repository: registry.stormforge.io/optimize-live/applier
       pullPolicy: IfNotPresent
@@ -21,11 +21,11 @@ component:
     recommender:
       repository: registry.stormforge.io/optimize-live/recommender
       pullPolicy: IfNotPresent
-      tag: 0.1.1
+      tag: 0.2.1
     grafana:
       repository: grafana/grafana-oss
       pullPolicy: IfNotPresent
-      tag: 8.4.1
+      tag: 8.4.6
 
 imagePullSecrets: []
 nameOverride: ""
@@ -62,7 +62,11 @@ authorization:
   clientID: id
   clientSecret: secret
 
-metricsURL: http://prometheus:9090
+# metricsURL should be used to set the URL of the prometheus server
+# that should be scraped to fetch metrics.
+# When using DataDog or another external metrics provider, this field
+# should be left at the default ""
+metricsURL: ""
 
 podAnnotations: {}
 
@@ -71,13 +75,14 @@ podSecurityContext: {}
 securityContext:
   runAsNonRoot: true
 
+# extraEnvVars can be used to set things like:
+# HTTP_PROXY/HTTPS_PROXY/NO_PROXY
+# DD_API_KEY/DD_APP_KEY/DD_SITE
+# This can also be set through the stormforge cli via
+# `stormforge config set controller.<environment>.env.HTTP_PROXY http://my.proxy.example`
 extraEnvVars: []
 
 resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   # limits:
   #   cpu: 500m
   #   memory: 128Mi
@@ -104,3 +109,12 @@ readinessProbe:
     port: 8081
   initialDelaySeconds: 5
   periodSeconds: 10
+
+# Override the default storage class for pv creation
+# It is strongly encouraged to use `xfs` as the backing filesystem
+# to avoid inode exhaustion.
+storageClass: ""
+
+ # pvcSize dictates how large of a PVC should be requested.
+ # This defaults to 10G
+pvcSize: ""
