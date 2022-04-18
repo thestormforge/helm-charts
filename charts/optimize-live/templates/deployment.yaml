@@ -11,17 +11,17 @@ spec:
     matchLabels:
       {{- include "optimize-live.selectorLabels" . | nindent 6 }}
   strategy:
-    type: Replace
+    type: Recreate
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        configChecksum: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "optimize-live.selectorLabels" . | nindent 8 }}
         helm.sh/chart-version: {{ .Chart.Version }}
-        configChecksum: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
     spec:
       enableServiceLinks: false
       imagePullSecrets:
