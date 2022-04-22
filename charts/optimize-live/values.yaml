@@ -9,11 +9,11 @@ component:
     controller:
       repository: registry.stormforge.io/optimize-live/controller
       pullPolicy: IfNotPresent
-      tag: 0.0.14-rc13
+      tag: 0.0.14
     tsdb:
       repository: registry.stormforge.io/optimize-live/tsdb
       pullPolicy: IfNotPresent
-      tag: 0.0.8-rc17
+      tag: 0.0.8
     applier:
       repository: registry.stormforge.io/optimize-live/applier
       pullPolicy: IfNotPresent
