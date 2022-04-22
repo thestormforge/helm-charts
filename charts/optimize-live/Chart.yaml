@@ -1,6 +1,6 @@
 apiVersion: v2
 name: optimize-live
-description: A Helm chart for Kubernetes
+description: StormForge Optimize Live applies machine learning to your existing observability metrics to make real-time, actionable recommendations to resource settings for any deployment running in Kubernetes
 
 # A chart can be either an 'application' or a 'library' chart.
 #
