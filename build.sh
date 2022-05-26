@@ -43,7 +43,7 @@ sources:
 - $(dockerlabel "org.opencontainers.image.source")
 - $(git remote get-url origin)
 icon: https://app.stormforge.io/img/logo.png
-appVersion: "$(dockerlabel "org.opencontainers.image.version")"
+appVersion: ${CHART_VERSION}
 EOF
 
 # values.yaml
