@@ -89,9 +89,9 @@ Create the name of the rolebinding to use
 Create the image pull secret
 */}}
 {{- define "optimize-live.dockerConfig" -}}
-{{- $auths := printf "%s:%s" .Values.imageCredentials.username .Values.imageCredentials.password -}}
-{{- $authsB64 := b64enc $auths -}}
-{{- $dockerAuth := dict "username" .Values.imageCredentials.username "password" .Values.imageCredentials.password "auths" $authsB64 -}}
+{{- $auth := printf "%s:%s" .Values.imageCredentials.username .Values.imageCredentials.password -}}
+{{- $authB64 := b64enc $auth -}}
+{{- $dockerAuth := dict "username" .Values.imageCredentials.username "password" .Values.imageCredentials.password "auth" $authB64 -}}
 {{- $registry := dict .Values.imageCredentials.registry $dockerAuth -}}
 {{- $dockerAuths := dict "auths" $registry -}}
 {{ b64enc (toJson $dockerAuths) }}

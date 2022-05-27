@@ -1,10 +1,9 @@
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
+    controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: lives.optimize.stormforge.io
 spec:
@@ -348,128 +347,247 @@ spec:
                         describes the strategy for tuning the application.
                       properties:
                         bounds:
+                          description: Bounds defines the resource constraints that
+                            recommendations should be made within. Deprecated, ContainerResources.Bounds
+                            should be used instead
                           properties:
-                            max:
-                              description: All of these fields are optional because
-                                we only want CPU/Memory for container Resources and
-                                we only want Replicas for Replicas.
+                            limits:
+                              description: Limits
                               properties:
-                                cpu:
-                                  anyOf:
-                                  - type: integer
-                                  - type: string
-                                  x-kubernetes-int-or-string: true
-                                memory:
-                                  anyOf:
-                                  - type: integer
-                                  - type: string
-                                  x-kubernetes-int-or-string: true
-                                replicas:
-                                  type: integer
+                                max:
+                                  additionalProperties:
+                                    anyOf:
+                                    - type: integer
+                                    - type: string
+                                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                    x-kubernetes-int-or-string: true
+                                  description: ResourceList is a set of (resource
+                                    name, quantity) pairs.
+                                  type: object
+                                min:
+                                  additionalProperties:
+                                    anyOf:
+                                    - type: integer
+                                    - type: string
+                                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                    x-kubernetes-int-or-string: true
+                                  description: ResourceList is a set of (resource
+                                    name, quantity) pairs.
+                                  type: object
+                              type: object
+                            max:
+                              additionalProperties:
+                                anyOf:
+                                - type: integer
+                                - type: string
+                                pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                x-kubernetes-int-or-string: true
+                              description: Max defines the upper limit for `limits`
+                                resources. Deprecated, use `Requests` or `Limits`
+                                instead
                               type: object
                             min:
-                              description: All of these fields are optional because
-                                we only want CPU/Memory for container Resources and
-                                we only want Replicas for Replicas.
-                              properties:
-                                cpu:
-                                  anyOf:
-                                  - type: integer
-                                  - type: string
-                                  x-kubernetes-int-or-string: true
-                                memory:
-                                  anyOf:
-                                  - type: integer
-                                  - type: string
-                                  x-kubernetes-int-or-string: true
-                                replicas:
-                                  type: integer
+                              additionalProperties:
+                                anyOf:
+                                - type: integer
+                                - type: string
+                                pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                x-kubernetes-int-or-string: true
+                              description: Min defines the lower limit for `limits`
+                                resources. Deprecated, use `Requests` or `Limits`
+                                instead
                               type: object
-                          required:
-                          - max
-                          - min
+                            requests:
+                              description: Requests
+                              properties:
+                                max:
+                                  additionalProperties:
+                                    anyOf:
+                                    - type: integer
+                                    - type: string
+                                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                    x-kubernetes-int-or-string: true
+                                  description: ResourceList is a set of (resource
+                                    name, quantity) pairs.
+                                  type: object
+                                min:
+                                  additionalProperties:
+                                    anyOf:
+                                    - type: integer
+                                    - type: string
+                                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                    x-kubernetes-int-or-string: true
+                                  description: ResourceList is a set of (resource
+                                    name, quantity) pairs.
+                                  type: object
+                              type: object
+                            type:
+                              description: Type defines where this bound should be
+                                applied to. Deprecated, use `Requests` or `Limits`
+                                instead
+                              type: string
                           type: object
                         containerResources:
                           description: Information related to the discovery of container
                             resources parameters like CPU and memory.
                           properties:
-                            resources:
-                              description: The names of the resources to optimize.
-                                Defaults to ["memory", "cpu"].
-                              items:
-                                description: ResourceName is the name identifying
-                                  various resources in a ResourceList.
-                                type: string
-                              type: array
+                            bounds:
+                              description: Bounds defines the resource constraints
+                                that recommendations should be made within.
+                              properties:
+                                limits:
+                                  description: Limits
+                                  properties:
+                                    max:
+                                      additionalProperties:
+                                        anyOf:
+                                        - type: integer
+                                        - type: string
+                                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                        x-kubernetes-int-or-string: true
+                                      description: ResourceList is a set of (resource
+                                        name, quantity) pairs.
+                                      type: object
+                                    min:
+                                      additionalProperties:
+                                        anyOf:
+                                        - type: integer
+                                        - type: string
+                                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                        x-kubernetes-int-or-string: true
+                                      description: ResourceList is a set of (resource
+                                        name, quantity) pairs.
+                                      type: object
+                                  type: object
+                                max:
+                                  additionalProperties:
+                                    anyOf:
+                                    - type: integer
+                                    - type: string
+                                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                    x-kubernetes-int-or-string: true
+                                  description: Max defines the upper limit for `limits`
+                                    resources. Deprecated, use `Requests` or `Limits`
+                                    instead
+                                  type: object
+                                min:
+                                  additionalProperties:
+                                    anyOf:
+                                    - type: integer
+                                    - type: string
+                                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                    x-kubernetes-int-or-string: true
+                                  description: Min defines the lower limit for `limits`
+                                    resources. Deprecated, use `Requests` or `Limits`
+                                    instead
+                                  type: object
+                                requests:
+                                  description: Requests
+                                  properties:
+                                    max:
+                                      additionalProperties:
+                                        anyOf:
+                                        - type: integer
+                                        - type: string
+                                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                        x-kubernetes-int-or-string: true
+                                      description: ResourceList is a set of (resource
+                                        name, quantity) pairs.
+                                      type: object
+                                    min:
+                                      additionalProperties:
+                                        anyOf:
+                                        - type: integer
+                                        - type: string
+                                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                        x-kubernetes-int-or-string: true
+                                      description: ResourceList is a set of (resource
+                                        name, quantity) pairs.
+                                      type: object
+                                  type: object
+                                type:
+                                  description: Type defines where this bound should
+                                    be applied to. Deprecated, use `Requests` or `Limits`
+                                    instead
+                                  type: string
+                              type: object
                             selector:
                               description: Label selector of Kubernetes objects to
                                 consider when generating container resources patches.
                               type: string
+                            tolerance:
+                              description: Tolerance defines how aggressive the recommendations
+                                should be.
+                              properties:
+                                cpu:
+                                  enum:
+                                  - low
+                                  - medium
+                                  - high
+                                  type: string
+                                cpuRisk:
+                                  description: Deprecated, use `CPU` instead
+                                  enum:
+                                  - low
+                                  - medium
+                                  - high
+                                  type: string
+                                memory:
+                                  enum:
+                                  - low
+                                  - medium
+                                  - high
+                                  type: string
+                                memoryRisk:
+                                  description: Deprecated, use `Memory` instead
+                                  enum:
+                                  - low
+                                  - medium
+                                  - high
+                                  type: string
+                              type: object
                           type: object
-                        environmentVariable:
-                          description: Information related to the discovery of environment
-                            variables.
-                          properties:
-                            name:
-                              description: The name of the environment variable to
-                                optimize.
-                              type: string
-                            prefix:
-                              description: The prefix of the value to use when setting
-                                the environment variable.
-                              type: string
-                            selector:
-                              description: Label selector of Kubernetes objects to
-                                consider when looking for environment variables.
-                              type: string
-                            suffix:
-                              description: The suffix of the value to use when setting
-                                the environment variable.
-                              type: string
-                            values:
-                              description: The discrete values of the environment
-                                variable.
-                              items:
-                                type: string
-                              type: array
-                          type: object
-                        replicas:
-                          description: Information related to the discovery of replica
-                            parameters.
-                          properties:
-                            selector:
-                              description: Label selector of Kubernetes objects to
-                                consider when generating replica patches.
-                              type: string
-                          type: object
+                        interval:
+                          description: UpdateInterval specifies how frequently recommendations
+                            should be applied.
+                          type: string
                         tolerance:
                           description: Tolerance only applies for ContainerResources,
-                            not Replicas (or env.. )
+                            not Replicas (or env.. ) Deprecated, ContainerResources.Tolerance
+                            should be used instead
                           properties:
+                            cpu:
+                              enum:
+                              - low
+                              - medium
+                              - high
+                              type: string
                             cpuRisk:
+                              description: Deprecated, use `CPU` instead
+                              enum:
+                              - low
+                              - medium
+                              - high
+                              type: string
+                            memory:
                               enum:
                               - low
                               - medium
                               - high
                               type: string
                             memoryRisk:
+                              description: Deprecated, use `Memory` instead
                               enum:
                               - low
                               - medium
                               - high
                               type: string
-                          required:
-                          - cpuRisk
-                          - memoryRisk
                           type: object
                         updateInterval:
-                          description: Configuration per resource TODO this needs
-                            to be reworked UpdateInterval is fine to stay here since
-                            it's common across all Resources but Bounds need to be
-                            split
+                          description: Deprecated, use `UpdateInterval` instead.
                           type: string
                       required:
-                      - bounds
+                      - interval
                       - updateInterval
                       type: object
                     type: array
@@ -487,12 +605,16 @@ spec:
                       description: Additional per component configuration.
                       type: string
                     enabled:
+                      description: Enabled dictates if the controller should skip
+                        the reconciliation for this component.
                       type: boolean
                     image:
+                      description: Image can be used to override the default image
+                        configured with the controller.
                       type: string
                     imagePullPolicy:
-                      description: PullPolicy describes a policy for if/when to pull
-                        a container image
+                      description: ImagePullPolicy can be used to override the default
+                        image pull policy configured with the controller.
                       type: string
                     name:
                       enum:
@@ -621,8 +743,14 @@ spec:
             - components
             type: object
           status:
-            description: LiveStatus defines the observed state of Live. // May want
-              to include application metadata here?
+            description: LiveStatus defines the observed state of Live.
+            properties:
+              controllerVersion:
+                description: ControllerVersion contains a version string for the controller
+                  that last updated this CRD. This is used for handling resource updates.
+                type: string
+            required:
+            - controllerVersion
             type: object
         type: object
     served: true

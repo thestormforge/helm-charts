@@ -23,6 +23,10 @@ spec:
         {{- include "optimize-live.selectorLabels" . | nindent 8 }}
         helm.sh/chart-version: {{ .Chart.Version }}
     spec:
+{{- if .Values.debug }}
+      args:
+      - --zap-log-level=9
+{{- end }}
       enableServiceLinks: false
       imagePullSecrets:
       - name: {{ include "optimize-live.fullname" . }}-docker
@@ -56,6 +60,10 @@ spec:
           - name: TSDB_PVC_SIZE
             value: {{ .Values.pvcSize }}
 {{- end }}
+{{- end }}
+{{- if .Values.debug }}
+          - name: DEBUG
+            value: "debug"
 {{- end }}
           - name: COMPONENT_TSDB_IMAGE
             value: {{ .Values.component.image.tsdb.repository }}:{{ .Values.component.image.tsdb.tag }}
