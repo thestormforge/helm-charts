@@ -118,3 +118,5 @@ storageClass: ""
  # pvcSize dictates how large of a PVC should be requested.
  # This defaults to 10G
 pvcSize: ""
+
+debug: false

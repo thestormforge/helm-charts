@@ -85,6 +85,10 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ .Values.component.image.controller.repository }}:{{ .Values.component.image.controller.tag }}
           imagePullPolicy: {{ .Values.component.image.controller.pullPolicy }}
+          {{- if .Values.debug }}
+          args:
+          - -zap-log-level=debug
+          {{- end }}
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:
