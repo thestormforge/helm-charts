@@ -120,3 +120,28 @@ storageClass: ""
 pvcSize: ""
 
 debug: false
+
+grafana:
+  resources: {}
+    # limits:
+    #   cpu: 500m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 10m
+    #   memory: 64Mi
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+  livenessProbe:
+    httpGet:
+      path: /api/health
+      port: 3000
+
+  readinessProbe:
+    httpGet:
+      path: /api/health
+      port: 3000

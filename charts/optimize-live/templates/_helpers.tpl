@@ -30,9 +30,7 @@ Create chart name and version as used by the chart label.
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
-{{/*
-Common labels
-*/}}
+{{/* Common labels */}}
 {{- define "optimize-live.labels" -}}
 helm.sh/chart: {{ include "optimize-live.chart" . }}
 {{ include "optimize-live.selectorLabels" . }}
@@ -40,21 +38,15 @@ helm.sh/chart: {{ include "optimize-live.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-component: controller
 {{- end }}
 
-{{/*
-Selector labels
-*/}}
+{{/* Selector labels */}}
 {{- define "optimize-live.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "optimize-live.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-component: controller
 {{- end }}
 
-{{/*
-Create the name of the service account to use
-*/}}
+{{/* Create the name of the service account to use */}}
 {{- define "optimize-live.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
 {{- default (include "optimize-live.fullname" .) .Values.serviceAccount.name }}

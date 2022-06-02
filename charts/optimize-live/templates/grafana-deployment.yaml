@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  labels:
+    {{- include "optimize-live.labels" . | nindent 4 }}
+    component: grafana
+  namespace: {{ include "optimize-live.namespace" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "optimize-live.selectorLabels" . | nindent 6 }}
+      component: grafana
+  template:
+    metadata:
+      annotations:
+        configChecksum: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "optimize-live.selectorLabels" . | nindent 8 }}
+        component: grafana
+        helm.sh/chart-version: {{ .Chart.Version }}
+    spec:
+      enableServiceLinks: false
+      imagePullSecrets:
+      - name: {{ include "optimize-live.fullname" . }}-docker
+      serviceAccountName: {{ include "optimize-live.serviceAccountName" . }}
+      automountServiceAccountToken: false
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: grafana
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ .Values.component.image.grafana.repository }}:{{ .Values.component.image.grafana.tag }}
+          imagePullPolicy: {{ .Values.component.image.grafana.pullPolicy }}
+          livenessProbe:
+            {{- toYaml .Values.grafana.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.grafana.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.grafana.resources | nindent 12 }}
+      {{- with .Values.grafana.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.grafana.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.grafana.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumeMounts:
+      - name: grafanaconfig
+        mountPath: /etc/grafana/grafana.ini
+        subPath: grafana.ini
+    volumes:
+    - name: grafanaconfig
+      configMap:
+        name: grafana
