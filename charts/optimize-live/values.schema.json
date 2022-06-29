@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "properties": {
+    "extraEnvVars": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "x-kubernetes-patch-merge-key": "name",
+      "x-kubernetes-patch-strategy": "merge"
+    }
+  }
+}
