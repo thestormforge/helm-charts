@@ -69,14 +69,12 @@ CRDS_DIR="${CHART_DIR}/${CHART_NAME}/crds"
 for f in "${BUILD_DIR}/"*_*_customresourcedefinition_*; do mv "${f}" "${CRDS_DIR}/${f#*_*_*_}" ; done
 
 # templates/deployment.yaml
-DEPLOYMENT_TEMPLATE="${CHART_DIR}/${CHART_NAME}/templates/deployment.yaml"
-cat "${BUILD_DIR}/apps_v1_deployment_{{ .release.name }}-controller-manager.yaml" \
-	| sed -e "/namespace: '{{ .Release.Namespace }}'/d" > "${DEPLOYMENT_TEMPLATE}"
+mv "${BUILD_DIR}/apps_v1_deployment_{{ .release.name }}-controller-manager.yaml" \
+	"${CHART_DIR}/${CHART_NAME}/templates/deployment.yaml"
 
 # templates/secret.yaml
-SECRET_TEMPLATE="${CHART_DIR}/${CHART_NAME}/templates/secret.yaml"
-cat "${BUILD_DIR}/v1_secret_{{ .release.name }}-manager.yaml" \
-	| sed -e "/namespace: '{{ .Release.Namespace }}'/d" > "${SECRET_TEMPLATE}"
+mv "${BUILD_DIR}/v1_secret_{{ .release.name }}-manager.yaml" \
+	"${CHART_DIR}/${CHART_NAME}/templates/secret.yaml"
 
 # templates/rbac.yaml
 RBAC_TEMPLATE="${CHART_DIR}/${CHART_NAME}/templates/rbac.yaml"
