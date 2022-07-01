@@ -43,6 +43,8 @@ patches:
       name: optimize-manager
       namespace: stormforge-system
     data:
+      STORMFORGE_SERVER_IDENTIFIER: '{{ .Values.stormforge.address | b64enc }}'
+      STORMFORGE_SERVER_ISSUER: '{{ .Values.authorization.issuer | b64enc }}'
       STORMFORGE_AUTHORIZATION_CLIENT_ID: '{{ .Values.authorization.clientID | b64enc }}'
       STORMFORGE_AUTHORIZATION_CLIENT_SECRET: '{{ .Values.authorization.clientSecret | b64enc }}'
 

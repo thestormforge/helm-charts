@@ -56,7 +56,10 @@ image:
 rbac:
   create: true
   bootstrapPermissions: true
+stormforge:
+  address: https://api.stormforge.io/
 authorization:
+  issuer: https://api.stormforge.io/
   clientID: ""
   clientSecret: ""
 EOF
