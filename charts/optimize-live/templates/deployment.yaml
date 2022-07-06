@@ -51,7 +51,7 @@ spec:
             value: {{ .Values.storageClass }}
 {{- end }}
 {{- end }}
-{{- if .Values.storageClass }}
+{{- if .Values.pvcSize }}
 {{- if (ne "" .Values.pvcSize) }}
           - name: TSDB_PVC_SIZE
             value: {{ .Values.pvcSize }}
