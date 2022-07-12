@@ -4,7 +4,7 @@ metadata:
   labels:
     app.kubernetes.io/instance: '{{ .Release.Name }}'
     app.kubernetes.io/managed-by: '{{ .Release.Service }}'
-    app.kubernetes.io/name: optimize-controller
+    app.kubernetes.io/name: optimize
     app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
     control-plane: controller-manager
     helm.sh/chart: '{{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_"
@@ -16,7 +16,7 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/instance: '{{ .Release.Name }}'
-      app.kubernetes.io/name: optimize-controller
+      app.kubernetes.io/name: optimize
       control-plane: controller-manager
   template:
     metadata:
@@ -25,7 +25,7 @@ spec:
           . | sha256sum }}'
       labels:
         app.kubernetes.io/instance: '{{ .Release.Name }}'
-        app.kubernetes.io/name: optimize-controller
+        app.kubernetes.io/name: optimize
         app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
         control-plane: controller-manager
     spec:
