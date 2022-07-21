@@ -62,6 +62,9 @@ authorization:
   issuer: https://api.stormforge.io/
   clientID: ""
   clientSecret: ""
+extraEnvs: []
+# - name: FOO
+#   value: bar
 EOF
 
 # crds/*
@@ -75,6 +78,12 @@ mv "${BUILD_DIR}/apps_v1_deployment_{{ .release.name }}-controller-manager.yaml"
 # templates/secret.yaml
 mv "${BUILD_DIR}/v1_secret_{{ .release.name }}-manager.yaml" \
 	"${CHART_DIR}/${CHART_NAME}/templates/secret.yaml"
+cat << EOF >> "${CHART_DIR}/${CHART_NAME}/templates/secret.yaml"
+  {{- range .Values.extraEnvs }}
+  {{ .name }}: {{ toYaml .value }}
+  {{- end }}
+EOF
+	
 
 # templates/rbac.yaml
 RBAC_TEMPLATE="${CHART_DIR}/${CHART_NAME}/templates/rbac.yaml"
