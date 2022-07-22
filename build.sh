@@ -73,6 +73,30 @@ extraEnvs: []
 #   value: bar
 EOF
 
+# values.schema.json
+cat <<-EOF > "${CHART_DIR}/${CHART_NAME}/values.schema.json"
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "properties": {
+    "extraEnvs": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "x-kubernetes-patch-merge-key": "name",
+      "x-kubernetes-patch-strategy": "merge"
+    }
+  }
+}
+EOF
+
 # crds/*
 CRDS_DIR="${CHART_DIR}/${CHART_NAME}/crds"
 for f in "${BUILD_DIR}/"*_*_customresourcedefinition_*; do mv "${f}" "${CRDS_DIR}/${f#*_*_*_}" ; done
