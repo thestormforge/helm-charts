@@ -62,6 +62,39 @@ authorization:
   issuer: https://api.stormforge.io/
   clientID: ""
   clientSecret: ""
+datadog:
+  apiKey:  # <DATADOG_API_KEY>
+  appKey:  # <DATADOG_APP_KEY>
+newrelic:
+  accountID:  # <NEW_RELIC_ACCOUNT_ID>
+  userKey:  # <NEW_RELIC_API_KEY>
+extraEnvs: []
+# - name: FOO
+#   value: bar
+EOF
+
+# values.schema.json
+cat <<-EOF > "${CHART_DIR}/${CHART_NAME}/values.schema.json"
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "properties": {
+    "extraEnvs": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "x-kubernetes-patch-merge-key": "name",
+      "x-kubernetes-patch-strategy": "merge"
+    }
+  }
+}
 EOF
 
 # crds/*
@@ -75,6 +108,22 @@ mv "${BUILD_DIR}/apps_v1_deployment_{{ .release.name }}-controller-manager.yaml"
 # templates/secret.yaml
 mv "${BUILD_DIR}/v1_secret_{{ .release.name }}-manager.yaml" \
 	"${CHART_DIR}/${CHART_NAME}/templates/secret.yaml"
+cat << EOF >> "${CHART_DIR}/${CHART_NAME}/templates/secret.yaml"
+  {{- if .Values.datadog.apiKey }}
+  DATADOG_API_KEY: '{{ .Values.datadog.apiKey }}'
+  {{- end }}
+  {{- if .Values.datadog.appKey }}
+  DATADOG_APP_KEY: '{{ .Values.datadog.appKey }}'
+  {{- end }}
+  {{- if and .Values.newrelic.accountID .Values.newrelic.userKey }}
+  NEW_RELIC_ACCOUNT_ID: '{{ .Values.newrelic.accountID }}'
+  NEW_RELIC_API_KEY: '{{ .Values.newrelic.userKey }}'
+  {{- end }}
+  {{- range .Values.extraEnvs }}
+  {{ .name }}: {{ toYaml .value }}
+  {{- end }}
+EOF
+	
 
 # templates/rbac.yaml
 RBAC_TEMPLATE="${CHART_DIR}/${CHART_NAME}/templates/rbac.yaml"
