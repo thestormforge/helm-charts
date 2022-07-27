@@ -12,3 +12,12 @@ authorization:
   issuer: https://api.stormforge.io/
   clientID: ""
   clientSecret: ""
+datadog:
+  apiKey:  # <DATADOG_API_KEY>
+  appKey:  # <DATADOG_APP_KEY>
+newrelic:
+  accountID:  # <NEW_RELIC_ACCOUNT_ID>
+  userKey:  # <NEW_RELIC_API_KEY>
+extraEnvs: []
+# - name: FOO
+#   value: bar
