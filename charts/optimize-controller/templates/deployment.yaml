@@ -1,16 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: '{{ .Release.Name }}-controller-manager'
+  namespace: '{{ .Release.Namespace }}'
   labels:
     app.kubernetes.io/instance: '{{ .Release.Name }}'
     app.kubernetes.io/managed-by: '{{ .Release.Service }}'
     app.kubernetes.io/name: optimize
     app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
     control-plane: controller-manager
-    helm.sh/chart: '{{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_"
-      | trunc 63 | trimSuffix "-" }}'
-  name: '{{ .Release.Name }}-controller-manager'
-  namespace: '{{ .Release.Namespace }}'
+    helm.sh/chart: '{{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}'
 spec:
   replicas: 1
   selector:
@@ -20,23 +19,21 @@ spec:
       control-plane: controller-manager
   template:
     metadata:
-      annotations:
-        stormforge.io/secretHash: '{{ include (print $.Template.BasePath "/secret.yaml")
-          . | sha256sum }}'
       labels:
         app.kubernetes.io/instance: '{{ .Release.Name }}'
         app.kubernetes.io/name: optimize
         app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
         control-plane: controller-manager
+      annotations:
+        stormforge.io/secretHash: '{{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}'
     spec:
+      terminationGracePeriodSeconds: 10
       containers:
-      - envFrom:
+      - name: manager
+        image: '{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}'
+        envFrom:
         - secretRef:
             name: '{{ .Release.Name }}-manager'
-        image: '{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion
-          }}'
-        imagePullPolicy: '{{ .Values.image.pullPolicy }}'
-        name: manager
         resources:
           limits:
             cpu: 100m
@@ -44,8 +41,8 @@ spec:
           requests:
             cpu: 100m
             memory: 250Mi
+        imagePullPolicy: '{{ .Values.image.pullPolicy }}'
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
           runAsNonRoot: true
-      terminationGracePeriodSeconds: 10

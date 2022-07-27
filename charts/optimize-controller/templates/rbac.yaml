@@ -2,61 +2,60 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  name: '{{ .Release.Name }}-manager-role'
   labels:
     app.kubernetes.io/instance: '{{ .Release.Name }}'
     app.kubernetes.io/managed-by: '{{ .Release.Service }}'
     app.kubernetes.io/name: optimize
     app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
-    helm.sh/chart: '{{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_"
-      | trunc 63 | trimSuffix "-" }}'
-  name: '{{ .Release.Name }}-manager-role'
+    helm.sh/chart: '{{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}'
 rules:
-- apiGroups:
-  - ""
-  resources:
+- resources:
   - namespaces
-  verbs:
-  - list
-- apiGroups:
+  apiGroups:
   - ""
-  resources:
-  - pods
   verbs:
   - list
-- apiGroups:
+- resources:
+  - pods
+  apiGroups:
+  - ""
+  verbs:
+  - list
+- resources:
+  - jobs
+  apiGroups:
   - batch
   - extensions
-  resources:
-  - jobs
   verbs:
   - create
   - get
   - list
   - patch
   - watch
-- apiGroups:
-  - optimize.stormforge.io
-  resources:
+- resources:
   - experiments
+  apiGroups:
+  - optimize.stormforge.io
   verbs:
   - get
   - list
   - update
   - watch
-- apiGroups:
-  - optimize.stormforge.io
-  resources:
+- resources:
   - experiments
   - experiments/finalizers
+  apiGroups:
+  - optimize.stormforge.io
   verbs:
   - get
   - list
   - update
   - watch
-- apiGroups:
-  - optimize.stormforge.io
-  resources:
+- resources:
   - trials
+  apiGroups:
+  - optimize.stormforge.io
   verbs:
   - create
   - delete
@@ -64,11 +63,11 @@ rules:
   - list
   - update
   - watch
-- apiGroups:
-  - optimize.stormforge.io
-  resources:
+- resources:
   - trials
   - trials/finalizers
+  apiGroups:
+  - optimize.stormforge.io
   verbs:
   - get
   - list
@@ -78,75 +77,73 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
+  name: '{{ .Release.Name }}-manager-rolebinding'
   labels:
     app.kubernetes.io/instance: '{{ .Release.Name }}'
     app.kubernetes.io/managed-by: '{{ .Release.Service }}'
     app.kubernetes.io/name: optimize
     app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
-    helm.sh/chart: '{{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_"
-      | trunc 63 | trimSuffix "-" }}'
-  name: '{{ .Release.Name }}-manager-rolebinding'
+    helm.sh/chart: '{{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}'
 roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
   name: '{{ .Release.Name }}-manager-role'
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
 subjects:
-- kind: ServiceAccount
-  name: default
+- name: default
   namespace: '{{ .Release.Namespace }}'
+  kind: ServiceAccount
 {{- if .Values.rbac.bootstrapPermissions }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  name: '{{ .Release.Name }}-patching-role'
   labels:
     app.kubernetes.io/instance: '{{ .Release.Name }}'
     app.kubernetes.io/managed-by: '{{ .Release.Service }}'
     app.kubernetes.io/name: optimize
     app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
-    helm.sh/chart: '{{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_"
-      | trunc 63 | trimSuffix "-" }}'
-  name: '{{ .Release.Name }}-patching-role'
+    helm.sh/chart: '{{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}'
 rules:
-- apiGroups:
-  - ""
-  resources:
+- resources:
   - configmaps
+  apiGroups:
+  - ""
   verbs:
   - get
   - patch
-- apiGroups:
-  - apps
-  - extensions
-  resources:
+- resources:
   - deployments
   - statefulsets
+  apiGroups:
+  - apps
+  - extensions
   verbs:
   - get
   - patch
-- apiGroups:
-  - ""
-  resources:
+- resources:
   - nodes
   - nodes/proxy
   - nodes/metrics
   - services
+  apiGroups:
+  - ""
   verbs:
   - get
   - list
   - watch
-- apiGroups:
-  - ""
-  resources:
+- resources:
   - pods
+  apiGroups:
+  - ""
   verbs:
   - list
   - watch
-- apiGroups:
-  - rbac.authorization.k8s.io
-  resources:
+- resources:
   - clusterroles
   - clusterrolebindings
+  apiGroups:
+  - rbac.authorization.k8s.io
   verbs:
   - get
   - list
@@ -154,13 +151,13 @@ rules:
   - create
   - update
   - delete
-- apiGroups:
-  - ""
-  resources:
+- resources:
   - serviceaccounts
   - configmaps
   - secrets
   - services
+  apiGroups:
+  - ""
   verbs:
   - get
   - list
@@ -168,12 +165,12 @@ rules:
   - create
   - update
   - delete
-- apiGroups:
-  - apps
-  - extensions
-  resources:
+- resources:
   - deployments
   - statefulsets
+  apiGroups:
+  - apps
+  - extensions
   verbs:
   - get
   - list
@@ -181,10 +178,10 @@ rules:
   - create
   - update
   - delete
-- apiGroups:
-  - optimize.stormforge.io
-  resources:
+- resources:
   - experiments
+  apiGroups:
+  - optimize.stormforge.io
   verbs:
   - get
   - list
@@ -196,21 +193,20 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
+  name: '{{ .Release.Name }}-patching-rolebinding'
   labels:
     app.kubernetes.io/instance: '{{ .Release.Name }}'
     app.kubernetes.io/managed-by: '{{ .Release.Service }}'
     app.kubernetes.io/name: optimize
     app.kubernetes.io/version: '{{ .Chart.AppVersion }}'
-    helm.sh/chart: '{{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_"
-      | trunc 63 | trimSuffix "-" }}'
-  name: '{{ .Release.Name }}-patching-rolebinding'
+    helm.sh/chart: '{{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}'
 roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
   name: '{{ .Release.Name }}-patching-role'
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
 subjects:
-- kind: ServiceAccount
-  name: default
+- name: default
   namespace: '{{ .Release.Namespace }}'
+  kind: ServiceAccount
 {{- end -}}
 {{- end -}}
