@@ -18,7 +18,7 @@ jobs:
           token: ${{ secrets.BMASTERS_TOKEN }}
       - name: Install Konjure
         run: |-
-          brew install thestormforge/tag/konjure
+          brew install thestormforge/tap/konjure
       - name: Build Chart
         env:
           IMAGE_TAG: ${{ github.event.inputs.image_tag }}
