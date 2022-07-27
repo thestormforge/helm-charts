@@ -102,12 +102,10 @@ CRDS_DIR="${CHART_DIR}/${CHART_NAME}/crds"
 for f in "${BUILD_DIR}/"*_*_customresourcedefinition_*; do mv "${f}" "${CRDS_DIR}/${f#*_*_*_}" ; done
 
 # templates/deployment.yaml
-mv "${BUILD_DIR}/apps_v1_deployment_{{ .release.name }}-controller-manager.yaml" \
-	"${CHART_DIR}/${CHART_NAME}/templates/deployment.yaml"
+konjure --format "${BUILD_DIR}/apps_v1_deployment_{{ .release.name }}-controller-manager.yaml" > "${CHART_DIR}/${CHART_NAME}/templates/deployment.yaml"
 
 # templates/secret.yaml
-mv "${BUILD_DIR}/v1_secret_{{ .release.name }}-manager.yaml" \
-	"${CHART_DIR}/${CHART_NAME}/templates/secret.yaml"
+konjure --format "${BUILD_DIR}/v1_secret_{{ .release.name }}-manager.yaml" > "${CHART_DIR}/${CHART_NAME}/templates/secret.yaml"
 cat << EOF >> "${CHART_DIR}/${CHART_NAME}/templates/secret.yaml"
   {{- if .Values.datadog.apiKey }}
   DATADOG_API_KEY: '{{ .Values.datadog.apiKey }}'
@@ -128,14 +126,14 @@ EOF
 # templates/rbac.yaml
 RBAC_TEMPLATE="${CHART_DIR}/${CHART_NAME}/templates/rbac.yaml"
 echo "{{- if .Values.rbac.create -}}" > "${RBAC_TEMPLATE}"
-cat "${BUILD_DIR}/rbac.authorization.k8s.io_v1_clusterrole_{{ .release.name }}-manager-role.yaml" >> "${RBAC_TEMPLATE}"
+konjure --format "${BUILD_DIR}/rbac.authorization.k8s.io_v1_clusterrole_{{ .release.name }}-manager-role.yaml" >> "${RBAC_TEMPLATE}"
 echo "---" >> "${RBAC_TEMPLATE}"
-cat "${BUILD_DIR}/rbac.authorization.k8s.io_v1_clusterrolebinding_{{ .release.name }}-manager-rolebinding.yaml" >> "${RBAC_TEMPLATE}"
+konjure --format "${BUILD_DIR}/rbac.authorization.k8s.io_v1_clusterrolebinding_{{ .release.name }}-manager-rolebinding.yaml" >> "${RBAC_TEMPLATE}"
 echo "{{- if .Values.rbac.bootstrapPermissions }}" >> "${RBAC_TEMPLATE}"
 echo "---" >> "${RBAC_TEMPLATE}"
-cat "${BUILD_DIR}/rbac.authorization.k8s.io_v1_clusterrole_{{ .release.name }}-patching-role.yaml" >> "${RBAC_TEMPLATE}"
+konjure --format "${BUILD_DIR}/rbac.authorization.k8s.io_v1_clusterrole_{{ .release.name }}-patching-role.yaml" >> "${RBAC_TEMPLATE}"
 echo "---" >> "${RBAC_TEMPLATE}"
-cat "${BUILD_DIR}/rbac.authorization.k8s.io_v1_clusterrolebinding_{{ .release.name }}-patching-rolebinding.yaml" >> "${RBAC_TEMPLATE}"
+konjure --format "${BUILD_DIR}/rbac.authorization.k8s.io_v1_clusterrolebinding_{{ .release.name }}-patching-rolebinding.yaml" >> "${RBAC_TEMPLATE}"
 echo "{{- end -}}" >> "${RBAC_TEMPLATE}"
 echo "{{- end -}}" >> "${RBAC_TEMPLATE}"
 
