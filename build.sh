@@ -108,17 +108,17 @@ konjure --format "${BUILD_DIR}/apps_v1_deployment_{{ .release.name }}-controller
 konjure --format "${BUILD_DIR}/v1_secret_{{ .release.name }}-manager.yaml" > "${CHART_DIR}/${CHART_NAME}/templates/secret.yaml"
 cat << EOF >> "${CHART_DIR}/${CHART_NAME}/templates/secret.yaml"
   {{- if .Values.datadog.apiKey }}
-  DATADOG_API_KEY: '{{ .Values.datadog.apiKey }}'
+  DATADOG_API_KEY: '{{ .Values.datadog.apiKey | b64enc }}'
   {{- end }}
   {{- if .Values.datadog.appKey }}
-  DATADOG_APP_KEY: '{{ .Values.datadog.appKey }}'
+  DATADOG_APP_KEY: '{{ .Values.datadog.appKey | b64enc }}'
   {{- end }}
   {{- if and .Values.newrelic.accountID .Values.newrelic.userKey }}
-  NEW_RELIC_ACCOUNT_ID: '{{ .Values.newrelic.accountID }}'
-  NEW_RELIC_API_KEY: '{{ .Values.newrelic.userKey }}'
+  NEW_RELIC_ACCOUNT_ID: '{{ .Values.newrelic.accountID | b64enc }}'
+  NEW_RELIC_API_KEY: '{{ .Values.newrelic.userKey | b64enc }}'
   {{- end }}
   {{- range .Values.extraEnvs }}
-  {{ .name }}: {{ toYaml .value }}
+  {{ .name }}: '{{ .value | b64enc }}'
   {{- end }}
 EOF
 	
