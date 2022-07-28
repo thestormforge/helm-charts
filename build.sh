@@ -68,7 +68,7 @@ datadog:
 newrelic:
   accountID:  # <NEW_RELIC_ACCOUNT_ID>
   userKey:  # <NEW_RELIC_API_KEY>
-extraEnvs: []
+extraEnvVars: []
 # - name: FOO
 #   value: bar
 EOF
@@ -78,7 +78,7 @@ cat <<-EOF > "${CHART_DIR}/${CHART_NAME}/values.schema.json"
 {
   "$schema": "https://json-schema.org/draft-07/schema#",
   "properties": {
-    "extraEnvs": {
+    "extraEnvVars": {
       "type": "array",
       "items": {
         "properties": {
@@ -117,7 +117,7 @@ cat << EOF >> "${CHART_DIR}/${CHART_NAME}/templates/secret.yaml"
   NEW_RELIC_ACCOUNT_ID: '{{ .Values.newrelic.accountID | b64enc }}'
   NEW_RELIC_API_KEY: '{{ .Values.newrelic.userKey | b64enc }}'
   {{- end }}
-  {{- range .Values.extraEnvs }}
+  {{- range .Values.extraEnvVars }}
   {{ .name }}: '{{ .value | b64enc }}'
   {{- end }}
 EOF
