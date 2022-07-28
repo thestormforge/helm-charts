@@ -18,6 +18,6 @@ datadog:
 newrelic:
   accountID:  # <NEW_RELIC_ACCOUNT_ID>
   userKey:  # <NEW_RELIC_API_KEY>
-extraEnvs: []
+extraEnvVars: []
 # - name: FOO
 #   value: bar
