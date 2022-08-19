@@ -30,6 +30,9 @@ cp "$(git rev-parse --show-toplevel)/src/${CHART_NAME}/kustomization.yaml" "${BU
 stormforge generate install --bootstrap-role > "${BUILD_DIR}/resources.yaml"
 (cd "${BUILD_DIR}" && kustomize build --output ".")
 
+# Additional information from the CLI
+SETUP_TOOLS_IMAGE_REPOSITORY="$(stormforge version --setuptools-image)"
+SETUP_TOOLS_IMAGE_REPOSITORY="${SETUP_TOOLS_IMAGE_REPOSITORY%%:*}"
 
 # Chart.yaml
 cat <<-EOF > "${CHART_DIR}/${CHART_NAME}/Chart.yaml"
@@ -72,6 +75,20 @@ newrelic:
 extraEnvVars: []
 # - name: FOO
 #   value: bar
+setupTasks:
+  image:
+    repository: ${SETUP_TOOLS_IMAGE_REPOSITORY}
+    # Default is the chart appVersion.
+    tag: ""
+trialJobs:
+  perftest:
+    image:
+      repository: thestormforge/optimize-trials
+      tag: v0.0.3-stormforge-perf
+  locust:
+    image:
+      repository: thestormforge/optimize-trials
+      tag: v0.0.3-locust
 EOF
 
 # values.schema.json

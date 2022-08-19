@@ -31,6 +31,13 @@ patches:
           - name: manager
             image: '{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}'
             imagePullPolicy: '{{ .Values.image.pullPolicy }}'
+            env:
+            - name: 'DEFAULT_SETUP_IMAGE'
+              value: '{{ .Values.setupTasks.image.repository }}:{{ .Values.setupTasks.image.tag | default .Chart.AppVersion }}'
+            - name: 'OPTIMIZE_TRIALS_STORMFORGE_PERF_IMAGE'
+              value: '{{ .Values.trialJobs.perftest.image.repository }}:{{ .Values.trialJobs.perftest.image.tag }}'
+            - name: 'OPTIMIZE_TRIALS_LOCUST_IMAGE'
+              value: '{{ .Values.trialJobs.locust.image.repository }}:{{ .Values.trialJobs.locust.image.tag }}'
             envFrom:
             - secretRef:
                 name: '{{ .Release.Name }}-manager'
