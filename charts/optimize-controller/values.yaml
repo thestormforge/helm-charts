@@ -21,3 +21,17 @@ newrelic:
 extraEnvVars: []
 # - name: FOO
 #   value: bar
+setupTasks:
+  image:
+    repository: thestormforge/setuptools
+    # Default is the chart appVersion.
+    tag: ""
+trialJobs:
+  perftest:
+    image:
+      repository: thestormforge/optimize-trials
+      tag: v0.0.3-stormforge-perf
+  locust:
+    image:
+      repository: thestormforge/optimize-trials
+      tag: v0.0.3-locust

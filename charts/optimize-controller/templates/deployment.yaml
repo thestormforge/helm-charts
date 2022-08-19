@@ -34,6 +34,13 @@ spec:
         envFrom:
         - secretRef:
             name: '{{ .Release.Name }}-manager'
+        env:
+        - name: DEFAULT_SETUP_IMAGE
+          value: '{{ .Values.setupTasks.image.repository }}:{{ .Values.setupTasks.image.tag | default .Chart.AppVersion }}'
+        - name: OPTIMIZE_TRIALS_STORMFORGE_PERF_IMAGE
+          value: '{{ .Values.trialJobs.perftest.image.repository }}:{{ .Values.trialJobs.perftest.image.tag }}'
+        - name: OPTIMIZE_TRIALS_LOCUST_IMAGE
+          value: '{{ .Values.trialJobs.locust.image.repository }}:{{ .Values.trialJobs.locust.image.tag }}'
         resources:
           limits:
             cpu: 100m
