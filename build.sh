@@ -47,7 +47,7 @@ sources:
 - $(git remote get-url origin)
 icon: https://app.stormforge.io/img/logo.png
 appVersion: ${CHART_VERSION}
-kubeVersion: 1.14.x - 1.21.x
+kubeVersion: 1.14.x-0 - 1.21.x-0
 EOF
 
 # values.yaml
