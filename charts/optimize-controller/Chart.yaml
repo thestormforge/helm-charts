@@ -9,4 +9,4 @@ sources:
 - https://github.com/thestormforge/helm-charts
 icon: https://app.stormforge.io/img/logo.png
 appVersion: 2.1.6
-kubeVersion: 1.14.x - 1.21.x
+kubeVersion: 1.14.x-0 - 1.21.x-0
