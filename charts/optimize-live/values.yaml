@@ -51,16 +51,16 @@ rbac:
 
 imageCredentials:
   registry: registry.stormforge.io
-  username: username
-  password: password
+  username: ""
+  password: ""
 
 stormforge:
   address: https://api.stormforge.io/
 
 authorization:
   issuer: https://api.stormforge.io/
-  clientID: id
-  clientSecret: secret
+  clientID: ""
+  clientSecret: ""
 
 # metricsURL should be used to set the URL of the prometheus server
 # that should be scraped to fetch metrics.
