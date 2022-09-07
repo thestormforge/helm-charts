@@ -1,1 +1,6 @@
 build/
+
+# IDEs
+.idea/
+*.iml
+.vscode
