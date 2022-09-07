@@ -15,7 +15,8 @@ spec:
   template:
     metadata:
       annotations:
-        configChecksum: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        configmapChecksum: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        secretChecksum: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
       {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -23,10 +24,6 @@ spec:
         {{- include "optimize-live.selectorLabels" . | nindent 8 }}
         helm.sh/chart-version: {{ .Chart.Version }}
     spec:
-{{- if .Values.debug }}
-      args:
-      - --zap-log-level=9
-{{- end }}
       enableServiceLinks: false
       imagePullSecrets:
       - name: {{ include "optimize-live.fullname" . }}-docker
@@ -38,28 +35,27 @@ spec:
           envFrom:
           - secretRef:
               name: {{ include "optimize-live.fullname" . }}
+          args:
+            - --config=/config/controller-manager.yaml
+          {{- if .Values.debug }}
+            - --zap-log-level=9
+          {{- end }}
           env:
           - name: IMAGE_PULL_SECRET_NAME
             value: {{ include "optimize-live.fullname" . }}-docker
           - name: SF_CREDS_SECRET_NAME
             value: {{ include "optimize-live.fullname" . }}
 {{- if .Values.metricsURL }}
-{{- if (ne "" .Values.metricsURL) }}
           - name: METRICS_URL
             value: {{ .Values.metricsURL }}
 {{- end }}
-{{- end }}
 {{- if .Values.storageClass }}
-{{- if (ne "" .Values.storageClass) }}
           - name: TSDB_STORAGE_CLASS_NAME
             value: {{ .Values.storageClass }}
 {{- end }}
-{{- end }}
 {{- if .Values.pvcSize }}
-{{- if (ne "" .Values.pvcSize) }}
           - name: TSDB_PVC_SIZE
             value: {{ .Values.pvcSize }}
-{{- end }}
 {{- end }}
 {{- if .Values.debug }}
           - name: DEBUG
@@ -99,6 +95,14 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: "/config"
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "optimize-live.fullname" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

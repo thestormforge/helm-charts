@@ -26,6 +26,17 @@ component:
       repository: grafana/grafana-oss
       pullPolicy: IfNotPresent
       tag: 8.5.4
+  resources:
+    tsdb: {}
+      # limits:
+      #   cpu: 2000m
+      #   memory: 128Mi
+      # requests:
+      #   cpu: 2000m
+      #   memory: 64Mi
+    applier: {}
+    recommender: {}
+    grafana: {}
 
 imagePullSecrets: []
 nameOverride: ""
