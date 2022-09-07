@@ -30,6 +30,8 @@ component:
     tsdb: {}
     applier: {}
     recommender:
+      # Applications with a large number of autoscaling targets may require increased requests
+      # If needing to unset resources, you can use "cpu: null" or "memory: null" in overrides when installing
       limits:
         cpu: 2000m
         memory: 4Gi
