@@ -36,9 +36,9 @@ spec:
           - secretRef:
               name: {{ include "optimize-live.fullname" . }}
           args:
-            - --config=/config/controller-manager.yaml
+          - --config=/config/controller-manager.yaml
           {{- if .Values.debug }}
-            - --zap-log-level=9
+          - --zap-log-level=9
           {{- end }}
           env:
           - name: IMAGE_PULL_SECRET_NAME
@@ -96,13 +96,13 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-            - name: config
-              mountPath: "/config"
-              readOnly: true
+          - name: config
+            mountPath: "/config"
+            readOnly: true
       volumes:
-        - name: config
-          configMap:
-            name: {{ include "optimize-live.fullname" . }}
+      - name: config
+        configMap:
+          name: {{ include "optimize-live.fullname" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
