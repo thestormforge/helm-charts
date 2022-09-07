@@ -23,10 +23,6 @@ spec:
         {{- include "optimize-live.selectorLabels" . | nindent 8 }}
         helm.sh/chart-version: {{ .Chart.Version }}
     spec:
-{{- if .Values.debug }}
-      args:
-      - --zap-log-level=9
-{{- end }}
       enableServiceLinks: false
       imagePullSecrets:
       - name: {{ include "optimize-live.fullname" . }}-docker
@@ -38,6 +34,10 @@ spec:
           envFrom:
           - secretRef:
               name: {{ include "optimize-live.fullname" . }}
+{{- if .Values.debug }}
+          args:
+            - --zap-log-level=9
+{{- end }}
           env:
           - name: IMAGE_PULL_SECRET_NAME
             value: {{ include "optimize-live.fullname" . }}-docker
