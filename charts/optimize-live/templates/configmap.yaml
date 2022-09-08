@@ -9,7 +9,7 @@ data:
   controller-manager.yaml: |
     # see: https://pkg.go.dev/sigs.k8s.io/controller-runtime/pkg/config/v1alpha1#ControllerManagerConfigurationSpec
     apiVersion: optimize.stormforge.io/v1
-    kind: ProjectConfig
+    kind: LiveConfig
     health:
       healthProbeBindAddress: :8081
     metrics:
