@@ -6,7 +6,7 @@ metadata:
     {{- include "optimize-live.labels" . | nindent 4 }}
   namespace: {{ include "optimize-live.namespace" . }}
 data:
-  controller-manager.yaml: |
+  live-config.yaml: |
     # see: https://pkg.go.dev/sigs.k8s.io/controller-runtime/pkg/config/v1alpha1#ControllerManagerConfigurationSpec
     apiVersion: optimize.stormforge.io/v1
     kind: LiveConfig

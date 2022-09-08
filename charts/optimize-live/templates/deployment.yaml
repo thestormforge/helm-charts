@@ -36,7 +36,7 @@ spec:
           - secretRef:
               name: {{ include "optimize-live.fullname" . }}
           args:
-          - --config=/config/controller-manager.yaml
+          - --config=/live-config.yaml
           {{- if .Values.debug }}
           - --zap-log-level=9
           {{- end }}
@@ -96,11 +96,12 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-          - name: config
-            mountPath: "/config"
+          - name: liveconfig
+            mountPath: "/live-config.yaml"
+            subPath: "live-config.yaml"
             readOnly: true
       volumes:
-      - name: config
+      - name: liveconfig
         configMap:
           name: {{ include "optimize-live.fullname" . }}
       {{- with .Values.nodeSelector }}
