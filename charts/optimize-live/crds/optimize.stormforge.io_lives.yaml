@@ -44,6 +44,13 @@ spec:
                   appName:
                     description: Friendly Name
                     type: string
+                  mode:
+                    description: Mode controls how the recommendations should be applied
+                    enum:
+                    - disabled
+                    - manual
+                    - automatic
+                    type: string
                   namespaceSelector:
                     description: Namespaces to look for resources in
                     properties:
@@ -588,12 +595,12 @@ spec:
                           type: string
                       required:
                       - interval
-                      - updateInterval
                       type: object
                     type: array
                 required:
                 - appID
                 - appName
+                - mode
                 - namespaceSelector
                 - resources
                 type: object
