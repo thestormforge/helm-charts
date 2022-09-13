@@ -26,6 +26,19 @@ component:
       repository: grafana/grafana-oss
       pullPolicy: IfNotPresent
       tag: 8.5.4
+  resources:
+    tsdb: {}
+    applier: {}
+    recommender:
+      # Applications with a large number of autoscaling targets may require increased requests
+      # If needing to unset resources, you can use "cpu: null" or "memory: null" in overrides when installing
+      limits:
+        cpu: 2000m
+        memory: 4Gi
+      requests:
+        cpu: 100m
+        memory: 2Gi
+    grafana: {}
 
 imagePullSecrets: []
 nameOverride: ""
