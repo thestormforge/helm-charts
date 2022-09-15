@@ -555,8 +555,9 @@ spec:
                               type: object
                           type: object
                         interval:
-                          description: UpdateInterval specifies how frequently recommendations
-                            should be applied.
+                          description: Interval specifies how frequently recommendations
+                            should be applied. It is equivalent to the field "Frequency"
+                            of the Optimize Live UI.
                           type: string
                         tolerance:
                           description: Tolerance only applies for ContainerResources,
@@ -591,7 +592,7 @@ spec:
                               type: string
                           type: object
                         updateInterval:
-                          description: Deprecated, use `UpdateInterval` instead.
+                          description: Deprecated, use `Interval` instead.
                           type: string
                       required:
                       - interval
