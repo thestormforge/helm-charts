@@ -9,15 +9,15 @@ component:
     controller:
       repository: registry.stormforge.io/optimize-live/controller
       pullPolicy: IfNotPresent
-      tag: 0.0.19-rc9
+      tag: 0.0.19-rc12
     tsdb:
       repository: registry.stormforge.io/optimize-live/tsdb
       pullPolicy: IfNotPresent
-      tag: 0.0.12-rc1
+      tag: 0.0.12-rc2
     applier:
       repository: registry.stormforge.io/optimize-live/applier
       pullPolicy: IfNotPresent
-      tag: 0.0.6-rc2
+      tag: 0.0.6-rc5
     recommender:
       repository: registry.stormforge.io/optimize-live/recommender
       pullPolicy: IfNotPresent
@@ -59,10 +59,21 @@ rbac:
   clusterRole:
     create: true
     name: ""
+
   clusterRoleBinding:
     create: true
     name: ""
 
+  # additional can be used to extend the permissions of the service account used for patching resources
+  #additional: |-
+  #  - apiGroups:
+  #    - optimize.stormforge.io
+  #    resources:
+  #    - lives/status
+  #    verbs:
+  #    - get
+  #    - patch
+  #    - update
 imageCredentials:
   registry: registry.stormforge.io
   username: ""
