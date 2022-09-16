@@ -9,15 +9,15 @@ component:
     controller:
       repository: registry.stormforge.io/optimize-live/controller
       pullPolicy: IfNotPresent
-      tag: 0.0.19-rc12
+      tag: 0.0.19-rc13
     tsdb:
       repository: registry.stormforge.io/optimize-live/tsdb
       pullPolicy: IfNotPresent
-      tag: 0.0.12-rc2
+      tag: 0.0.12-rc4
     applier:
       repository: registry.stormforge.io/optimize-live/applier
       pullPolicy: IfNotPresent
-      tag: 0.0.6-rc5
+      tag: 0.0.6-rc6
     recommender:
       repository: registry.stormforge.io/optimize-live/recommender
       pullPolicy: IfNotPresent
@@ -74,6 +74,7 @@ rbac:
   #    - get
   #    - patch
   #    - update
+
 imageCredentials:
   registry: registry.stormforge.io
   username: ""
