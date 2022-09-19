@@ -27,11 +27,31 @@ component:
       pullPolicy: IfNotPresent
       tag: 9.1.5
   resources:
-    tsdb: {}
-    applier: {}
+    # Applications with a large number of autoscaling targets may require increased requests
+    # If needing to unset resources, you can use "cpu: null" or "memory: null" in overrides when installing
+    # These resource values most suit a 500-target setup
+    controller:
+      limits:
+        cpu: 250m
+        memory: 500Mi
+      requests:
+        cpu: 150m
+        memory: 150Mi
+    tsdb:
+      limits:
+        cpu: 2500m    # CPU peaks during backlog filling
+        memory: 500Mi
+      requests:
+        cpu: 150m
+        memory: 150Mi
+    applier:
+      limits:
+        cpu: 200m
+        memory: 200Mi
+      requests:
+        cpu: 100m
+        memory: 100Mi
     recommender:
-      # Applications with a large number of autoscaling targets may require increased requests
-      # If needing to unset resources, you can use "cpu: null" or "memory: null" in overrides when installing
       limits:
         cpu: 2000m
         memory: 2Gi
