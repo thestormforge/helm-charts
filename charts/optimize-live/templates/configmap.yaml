@@ -22,15 +22,23 @@ data:
 
     # Component settings
     components:
+      {{- if .Values.component.resources.tsdb }}
       tsdb:
         resources:
           {{- toYaml .Values.component.resources.tsdb | nindent 10 }}
+      {{- end }}
+      {{- if .Values.component.resources.applier }}
       applier:
         resources:
           {{- toYaml .Values.component.resources.applier | nindent 10 }}
+      {{- end }}
+      {{- if .Values.component.resources.recommender }}
       recommender:
         resources:
           {{- toYaml .Values.component.resources.recommender | nindent 10 }}
+      {{- end }}
+      {{- if .Values.component.resources.grafana }}
       grafana:
         resources:
           {{- toYaml .Values.component.resources.grafana | nindent 10 }}
+      {{- end }}
