@@ -4,41 +4,43 @@
 
 replicaCount: 1
 
-component:
+tsdb:
   image:
-    controller:
-      repository: registry.stormforge.io/optimize-live/controller
-      pullPolicy: IfNotPresent
-      tag: 0.0.19
-    tsdb:
-      repository: registry.stormforge.io/optimize-live/tsdb
-      pullPolicy: IfNotPresent
-      tag: 0.0.12
-    applier:
-      repository: registry.stormforge.io/optimize-live/applier
-      pullPolicy: IfNotPresent
-      tag: 0.0.6
-    recommender:
-      repository: registry.stormforge.io/optimize-live/recommender
-      pullPolicy: IfNotPresent
-      tag: 0.3.2
-    grafana:
-      repository: grafana/grafana-oss
-      pullPolicy: IfNotPresent
-      tag: 9.1.5
+    repository: registry.stormforge.io/optimize-live/tsdb
+    pullPolicy: IfNotPresent
+    tag: 0.0.12
+
+applier:
+  image:
+    repository: registry.stormforge.io/optimize-live/applier
+    pullPolicy: IfNotPresent
+    tag: 0.0.6
+
+recommender:
+  image:
+    repository: registry.stormforge.io/optimize-live/recommender
+    pullPolicy: IfNotPresent
+    tag: 0.3.2
   resources:
-    tsdb: {}
-    applier: {}
-    recommender:
-      # Applications with a large number of autoscaling targets may require increased requests
-      # If needing to unset resources, you can use "cpu: null" or "memory: null" in overrides when installing
-      limits:
-        cpu: 2000m
-        memory: 2Gi
-      requests:
-        cpu: 100m
-        memory: 100Mi
-    grafana: {}
+    # Applications with a large number of autoscaling targets may require increased requests
+    # If needing to unset resources, you can use "cpu: null" or "memory: null" in overrides when installing
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+
+grafana:
+  image:
+    repository: grafana/grafana-oss
+    pullPolicy: IfNotPresent
+    tag: 9.1.5
+
+image:
+  repository: registry.stormforge.io/optimize-live/controller
+  pullPolicy: IfNotPresent
+  tag: 0.0.19
 
 imagePullSecrets: []
 nameOverride: ""
