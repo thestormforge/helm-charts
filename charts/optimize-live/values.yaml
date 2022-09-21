@@ -9,12 +9,26 @@ tsdb:
     repository: registry.stormforge.io/optimize-live/tsdb
     pullPolicy: IfNotPresent
     tag: 0.0.12
+  resources:
+    limits:
+      cpu: 2500m    # CPU peaks during backlog filling
+      memory: 500Mi
+    requests:
+      cpu: 150m
+      memory: 150Mi
 
 applier:
   image:
     repository: registry.stormforge.io/optimize-live/applier
     pullPolicy: IfNotPresent
     tag: 0.0.6
+  resources:
+    limits:
+      cpu: 200m
+      memory: 200Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
 
 recommender:
   image:
@@ -22,8 +36,6 @@ recommender:
     pullPolicy: IfNotPresent
     tag: 0.3.2
   resources:
-    # Applications with a large number of autoscaling targets may require increased requests
-    # If needing to unset resources, you can use "cpu: null" or "memory: null" in overrides when installing
     limits:
       cpu: 2000m
       memory: 2Gi
@@ -109,13 +121,15 @@ securityContext:
 # `stormforge config set controller.<environment>.env.HTTP_PROXY http://my.proxy.example`
 extraEnvVars: []
 
-resources: {}
-  # limits:
-  #   cpu: 500m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 10m
-  #   memory: 64Mi
+# These resource values most suit a 500-target setup
+# If needing to unset resources, you can use "cpu: null" or "memory: null" in overrides when installing
+resources:
+  limits:
+    cpu: 250m
+    memory: 500Mi
+  requests:
+    cpu: 150m
+    memory: 150Mi
 
 nodeSelector: {}
 
