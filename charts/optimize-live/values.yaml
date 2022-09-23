@@ -91,8 +91,10 @@ rbac:
   #     - lives/status
   #     verbs:
   #     - get
+  #     - list
   #     - patch
   #     - update
+  #     - watch
 
 imageCredentials:
   registry: registry.stormforge.io
