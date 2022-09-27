@@ -86,7 +86,7 @@ spec:
           readinessProbe:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
-            {{- toYaml .Values.component.resources.controller | nindent 12 }}
+            {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
           - name: liveconfig
             mountPath: "/live-config.yaml"
