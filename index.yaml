@@ -2,6 +2,22 @@ apiVersion: v1
 entries:
   optimize-controller:
   - apiVersion: v2
+    appVersion: 2.1.7
+    created: "2022-09-29T23:42:34.256111292Z"
+    description: Kubernetes Performance Testing and resource optimization for flawless app performance and cloud efficiency without manual tuning.
+    digest: 43e42cbd79c8a469a1c3106b75ea7398fb457576bad484153ea998e8e2bbca21
+    home: https://www.stormforge.io/
+    icon: https://app.stormforge.io/img/logo.png
+    kubeVersion: 1.14.x-0 - 1.21.x-0
+    name: optimize-controller
+    sources:
+    - https://github.com/thestormforge/optimize-controller
+    - https://github.com/thestormforge/helm-charts
+    type: application
+    urls:
+    - https://github.com/thestormforge/helm-charts/releases/download/optimize-controller-2.1.7/optimize-controller-2.1.7.tgz
+    version: 2.1.7
+  - apiVersion: v2
     appVersion: 2.1.6
     created: "2022-08-19T18:41:09.061963951Z"
     description: Kubernetes Performance Testing and resource optimization for flawless app performance and cloud efficiency without manual tuning.
