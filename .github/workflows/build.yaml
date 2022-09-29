@@ -18,6 +18,7 @@ jobs:
           token: ${{ secrets.BMASTERS_TOKEN }}
       - name: Install Konjure
         run: |-
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           brew install thestormforge/tap/konjure
       - name: Build Chart
         env:
