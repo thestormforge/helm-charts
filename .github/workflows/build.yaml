@@ -18,8 +18,8 @@ jobs:
           token: ${{ secrets.BMASTERS_TOKEN }}
       - name: Install Konjure
         run: |-
-          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-          brew install thestormforge/tap/konjure
+          echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
+          /home/linuxbrew/.linuxbrew/bin/brew install thestormforge/tap/konjure
       - name: Build Chart
         env:
           IMAGE_TAG: ${{ github.event.inputs.image_tag }}
