@@ -554,6 +554,27 @@ spec:
                                   type: string
                               type: object
                           type: object
+                        hpaResources:
+                          description: Information related to the discovery of HPA
+                            resources parameters such as targetCPUUtilizationPercentage.
+                          properties:
+                            bounds:
+                              properties:
+                                targetUtilization:
+                                  properties:
+                                    max:
+                                      additionalProperties:
+                                        format: int32
+                                        type: integer
+                                      type: object
+                                    min:
+                                      additionalProperties:
+                                        format: int32
+                                        type: integer
+                                      type: object
+                                  type: object
+                              type: object
+                          type: object
                         interval:
                           description: Interval specifies how frequently recommendations
                             should be applied. It is equivalent to the field "Frequency"
