@@ -561,16 +561,29 @@ spec:
                             bounds:
                               properties:
                                 targetUtilization:
+                                  description: TargetUtilization specifies a percentage
+                                    utilization (integer between 0 and 100 inclusive)
+                                    of a resource (i.e. cpu)
                                   properties:
                                     max:
                                       additionalProperties:
-                                        format: int32
-                                        type: integer
+                                        anyOf:
+                                        - type: integer
+                                        - type: string
+                                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                        x-kubernetes-int-or-string: true
+                                      description: ResourceList is a set of (resource
+                                        name, quantity) pairs.
                                       type: object
                                     min:
                                       additionalProperties:
-                                        format: int32
-                                        type: integer
+                                        anyOf:
+                                        - type: integer
+                                        - type: string
+                                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                        x-kubernetes-int-or-string: true
+                                      description: ResourceList is a set of (resource
+                                        name, quantity) pairs.
                                       type: object
                                   type: object
                               type: object
