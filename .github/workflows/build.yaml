@@ -16,10 +16,8 @@ jobs:
         with:
           # Need to use a PAT so this will trigger the release action
           token: ${{ secrets.BMASTERS_TOKEN }}
-      - name: Install Konjure
-        run: |-
-          echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
-          /home/linuxbrew/.linuxbrew/bin/brew install thestormforge/tap/konjure
+      - name: Setup Konjure
+        uses: thestormforge/setup-konjure@v1
       - name: Build Chart
         env:
           IMAGE_TAG: ${{ github.event.inputs.image_tag }}
