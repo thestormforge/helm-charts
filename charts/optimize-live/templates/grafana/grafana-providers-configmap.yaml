@@ -1,0 +1,11 @@
+{{- if or .Release.IsInstall .Values.component.config.grafana.forceGenerateConfigs }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-providers
+  labels:
+    {{- include "grafana.labels" . | nindent 4 }}
+  namespace: {{ include "optimize-live.namespace" . }}
+data:
+{{ (.Files.Glob "grafana/providers.yaml").AsConfig | indent 2 }}
+{{- end }}

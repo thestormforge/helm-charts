@@ -1,0 +1,687 @@
+{
+    "annotations": {
+        "list": [{
+            "builtIn": 1,
+            "datasource": {
+                "type": "datasource",
+                "uid": "grafana"
+            },
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "target": {
+                "limit": 100,
+                "matchAny": false,
+                "tags": [],
+                "type": "dashboard"
+            },
+            "type": "dashboard"
+        }]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 5,
+    "iteration": 1656618325259,
+    "links": [],
+    "liveNow": false,
+    "panels": [{
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${application}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "mappings": [],
+                    "max": 1,
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [{
+                            "color": "green",
+                            "value": null
+                        }]
+                    },
+                    "unit": "percentunit"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 12,
+                "x": 0,
+                "y": 0
+            },
+            "id": 5,
+            "options": {
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showThresholdLabels": false,
+                "showThresholdMarkers": false
+            },
+            "pluginVersion": "",
+            "targets": [{
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${application}"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "1 - avg(recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\",metric=\"requests\",cpuRisk=\"$cpuRisk\"}) / avg(requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\"})",
+                "format": "time_series",
+                "instant": false,
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "A"
+            }],
+            "title": "Percentage Savings (CPU)",
+            "type": "gauge"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${application}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [{
+                            "color": "green",
+                            "value": null
+                        }]
+                    },
+                    "unit": "none"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 12,
+                "x": 12,
+                "y": 0
+            },
+            "id": 4,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "value"
+            },
+            "pluginVersion": "",
+            "targets": [{
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${application}"
+                    },
+                    "editorMode": "code",
+                    "exemplar": false,
+                    "expr": "avg(replicas{workload=~\"$workload\",namespace=~\"$namespace\"}) * (\n    avg(requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\"}) \n    - \n    avg(recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\",metric=\"requests\",cpuRisk=\"$cpuRisk\"})\n)",
+                    "format": "time_series",
+                    "instant": false,
+                    "legendFormat": "__auto",
+                    "range": true,
+                    "refId": "A"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${application}"
+                    },
+                    "expr": "",
+                    "hide": false,
+                    "refId": "B"
+                }
+            ],
+            "title": "cpu core-hours saved (per hr)",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${application}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "linear",
+                        "lineStyle": {
+                            "fill": "solid"
+                        },
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": true,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [{
+                            "color": "green",
+                            "value": null
+                        }]
+                    },
+                    "unit": "none"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 11,
+                "w": 24,
+                "x": 0,
+                "y": 7
+            },
+            "id": 2,
+            "options": {
+                "legend": {
+                    "calcs": [
+                        "lastNotNull",
+                        "max",
+                        "min"
+                    ],
+                    "displayMode": "table",
+                    "placement": "right"
+                },
+                "tooltip": {
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "",
+            "targets": [{
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${application}"
+                    },
+                    "editorMode": "code",
+                    "exemplar": true,
+                    "expr": "max by (workload,namespace,resource) (sum by (workload,namespace,pod,resource) (requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\"})) * 1000",
+                    "hide": false,
+                    "interval": "",
+                    "legendFormat": "requests",
+                    "range": true,
+                    "refId": "B"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${application}"
+                    },
+                    "editorMode": "code",
+                    "exemplar": true,
+                    "expr": "sum by (workload,namespace,resource,cpuRisk) (recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\",metric=\"requests\",cpuRisk=\"$cpuRisk\"}) * 1000",
+                    "hide": false,
+                    "interval": "",
+                    "legendFormat": "recommendation",
+                    "range": true,
+                    "refId": "D"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${application}"
+                    },
+                    "editorMode": "code",
+                    "exemplar": false,
+                    "expr": "avg by (workload,namespace,resource) (sum by (workload,namespace,pod,resource) (usage{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\"})) * 1000",
+                    "hide": false,
+                    "interval": "",
+                    "legendFormat": "usage",
+                    "range": true,
+                    "refId": "C"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${application}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg by(workload, namespace) (recommendation{metric=\"requests\",workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\",cpuRisk=\"$cpuRisk\"}) * 1000 * avg by (workload, namespace) (recommendation{metric=\"target\",workload=~\"$workload\",namespace=~\"$namespace\",cpuRisk=\"$cpuRisk\"}) / 100 ",
+                    "hide": false,
+                    "legendFormat": "recommended scale point",
+                    "range": true,
+                    "refId": "E"
+                }
+            ],
+            "title": "CPU Recommendations (millicore)",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${application}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [],
+                    "max": 1,
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [{
+                            "color": "green",
+                            "value": null
+                        }]
+                    },
+                    "unit": "percentunit"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 12,
+                "x": 0,
+                "y": 18
+            },
+            "id": 7,
+            "options": {
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showThresholdLabels": false,
+                "showThresholdMarkers": false
+            },
+            "pluginVersion": "",
+            "targets": [{
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${application}"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "1 - avg(recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\",metric=\"requests\",cpuRisk=\"$cpuRisk\"}) / avg(requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\",cpuRisk=\"$cpuRisk\"})",
+                "format": "time_series",
+                "instant": false,
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "A"
+            }],
+            "title": "Percentage Savings (Memory)",
+            "type": "gauge"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${application}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [{
+                            "color": "green",
+                            "value": null
+                        }]
+                    },
+                    "unit": "decbytes"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 12,
+                "x": 12,
+                "y": 18
+            },
+            "id": 8,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto"
+            },
+            "pluginVersion": "",
+            "targets": [{
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${application}"
+                },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "avg(replicas{workload=~\"$workload\",namespace=~\"$namespace\"}) * (\n    avg(requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\"}) \n    - \n    avg(recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\",metric=\"requests\"})\n)",
+                "format": "time_series",
+                "instant": false,
+                "legendFormat": "__auto",
+                "range": true,
+                "refId": "A"
+            }],
+            "title": "memory megabyte-hour saved (per hr)",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${application}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "linear",
+                        "lineStyle": {
+                            "fill": "solid"
+                        },
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": true,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [{
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "decbytes"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 11,
+                "w": 24,
+                "x": 0,
+                "y": 25
+            },
+            "id": 9,
+            "options": {
+                "legend": {
+                    "calcs": [
+                        "lastNotNull",
+                        "max",
+                        "min"
+                    ],
+                    "displayMode": "table",
+                    "placement": "right"
+                },
+                "tooltip": {
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "",
+            "targets": [{
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${application}"
+                    },
+                    "editorMode": "code",
+                    "exemplar": true,
+                    "expr": "max by (workload,namespace,resource) (sum by (workload,namespace,pod,resource) (requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\"}))",
+                    "hide": false,
+                    "interval": "",
+                    "legendFormat": "requests",
+                    "range": true,
+                    "refId": "B"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${application}"
+                    },
+                    "editorMode": "code",
+                    "exemplar": true,
+                    "expr": "sum by (workload,namespace,resource,memoryRisk) (recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\",metric=\"requests\",memoryRisk=\"$memoryRisk\"})",
+                    "hide": false,
+                    "interval": "",
+                    "legendFormat": "recommendation",
+                    "range": true,
+                    "refId": "D"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${application}"
+                    },
+                    "editorMode": "code",
+                    "exemplar": true,
+                    "expr": "avg by (workload,namespace,resource) (sum by (workload,namespace,pod,resource) (usage{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\"}))",
+                    "hide": false,
+                    "interval": "",
+                    "legendFormat": "usage",
+                    "range": true,
+                    "refId": "C"
+                }
+            ],
+            "title": "Memory Recommendations",
+            "type": "timeseries"
+        }
+    ],
+    "refresh": false,
+    "schemaVersion": 36,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+        "list": [{
+                "current": {
+                    "selected": false
+                },
+                "hide": 0,
+                "includeAll": false,
+                "label": "Application",
+                "multi": false,
+                "name": "application",
+                "options": [],
+                "query": "prometheus",
+                "queryValue": "",
+                "refresh": 2,
+                "regex": "",
+                "skipUrlSync": false,
+                "type": "datasource"
+            },
+            {
+                "current": {
+                    "selected": false
+                },
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${application}"
+                },
+                "definition": "label_values(namespace)",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Namespace",
+                "multi": false,
+                "name": "namespace",
+                "options": [],
+                "query": {
+                    "query": "label_values(namespace)",
+                    "refId": "StandardVariableQuery"
+                },
+                "refresh": 2,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "current": {
+                    "selected": false
+                },
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${application}"
+                },
+                "definition": "label_values(workload)",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Workload",
+                "multi": false,
+                "name": "workload",
+                "options": [],
+                "query": {
+                    "query": "label_values(workload)",
+                    "refId": "StandardVariableQuery"
+                },
+                "refresh": 2,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "current": {
+                    "selected": false
+                },
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${application}"
+                },
+                "definition": "label_values(cpuRisk)",
+                "hide": 0,
+                "includeAll": false,
+                "label": "CPU Tolerance",
+                "multi": false,
+                "name": "cpuRisk",
+                "options": [],
+                "query": {
+                    "query": "label_values(cpuRisk)",
+                    "refId": "StandardVariableQuery"
+                },
+                "refresh": 2,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 1,
+                "type": "query"
+            },
+            {
+                "current": {
+                    "selected": false
+                },
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${application}"
+                },
+                "definition": "label_values(memoryRisk)",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Memory Tolerance",
+                "multi": false,
+                "name": "memoryRisk",
+                "options": [],
+                "query": {
+                    "query": "label_values(memoryRisk)",
+                    "refId": "StandardVariableQuery"
+                },
+                "refresh": 2,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 1,
+                "type": "query"
+            }
+        ]
+    },
+    "time": {
+        "from": "now-3h",
+        "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Optimize Live - HPA",
+    "uid": "d_AhnIjnz",
+    "version": 7,
+    "weekStart": ""
+}

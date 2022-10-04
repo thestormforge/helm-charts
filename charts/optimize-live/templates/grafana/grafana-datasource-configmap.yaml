@@ -1,0 +1,21 @@
+{{- if or .Release.IsInstall .Values.component.config.grafana.forceGenerateConfigs }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasource
+  labels:
+    {{- include "grafana.labels" . | nindent 4 }}
+  namespace: {{ include "optimize-live.namespace" . }}
+data:
+  datasource.yaml: |
+    apiVersion: 1
+    datasources:
+    - access: ""
+      editable: false
+      isDefault: false
+      name: "empty"
+      orgId: 1
+      type: prometheus
+      url: {{ .Values.metricsURL }}
+      version: 1
+{{- end }}

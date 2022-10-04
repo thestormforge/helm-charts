@@ -59,6 +59,14 @@ component:
         cpu: 100m
         memory: 100Mi
     grafana: {}
+  config:
+    grafana:
+      componentNameOverride: ""
+      port: "80"
+      targetPort: "3000"
+      # Flag to force the generation of configmap files for Grafana.
+      # Setting as "true" will rewrite configmaps independently if installing or upgrading
+      forceGenerateConfigs: ""
 
 imagePullSecrets: []
 nameOverride: ""
