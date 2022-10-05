@@ -40,7 +40,7 @@ component:
     tsdb:
       limits:
         cpu: 2500m    # CPU peaks during backlog filling
-        memory: 500Mi
+        memory: 1000Mi
       requests:
         cpu: 150m
         memory: 150Mi
