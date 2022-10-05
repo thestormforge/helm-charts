@@ -61,14 +61,6 @@ spec:
           - name: DEBUG
             value: "debug"
 {{- end }}
-          - name: COMPONENT_TSDB_IMAGE
-            value: {{ .Values.component.image.tsdb.repository }}:{{ .Values.component.image.tsdb.tag }}
-          - name: COMPONENT_APPLIER_IMAGE
-            value: {{ .Values.component.image.applier.repository }}:{{ .Values.component.image.applier.tag }}
-          - name: COMPONENT_RECOMMENDER_IMAGE
-            value: {{ .Values.component.image.recommender.repository }}:{{ .Values.component.image.recommender.tag }}
-          - name: COMPONENT_GRAFANA_IMAGE
-            value: {{ .Values.component.image.grafana.repository }}:{{ .Values.component.image.grafana.tag }}
           - name: CONTROLLER_NAMESPACE
             valueFrom:
               fieldRef:
@@ -87,14 +79,14 @@ spec:
                 fieldPath: metadata.labels['helm.sh/chart-version']
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: {{ .Values.component.image.controller.repository }}:{{ .Values.component.image.controller.tag }}
-          imagePullPolicy: {{ .Values.component.image.controller.pullPolicy }}
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
-            {{- toYaml .Values.component.resources.controller | nindent 12 }}
+            {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
           - name: liveconfig
             mountPath: "/live-config.yaml"
