@@ -22,23 +22,31 @@ data:
 
     # Component settings
     components:
-      {{- if .Values.component.resources.tsdb }}
       tsdb:
+        image: "{{ .Values.tsdb.image.repository }}:{{ .Values.tsdb.image.tag }}"
+        imagePullPolicy: {{ .Values.tsdb.image.pullPolicy }}
+        {{- if .Values.tsdb.resources }}
         resources:
-          {{- toYaml .Values.component.resources.tsdb | nindent 10 }}
-      {{- end }}
-      {{- if .Values.component.resources.applier }}
+          {{- toYaml .Values.tsdb.resources | nindent 10 }}
+        {{- end }}
       applier:
+        image: "{{ .Values.applier.image.repository }}:{{ .Values.applier.image.tag }}"
+        imagePullPolicy: {{ .Values.applier.image.pullPolicy }}
+        {{- if .Values.applier.resources }}
         resources:
-          {{- toYaml .Values.component.resources.applier | nindent 10 }}
-      {{- end }}
-      {{- if .Values.component.resources.recommender }}
+          {{- toYaml .Values.applier.resources | nindent 10 }}
+        {{- end }}
       recommender:
+        image: "{{ .Values.recommender.image.repository }}:{{ .Values.recommender.image.tag }}"
+        imagePullPolicy: {{ .Values.recommender.image.pullPolicy }}
+        {{- if .Values.recommender.resources }}
         resources:
-          {{- toYaml .Values.component.resources.recommender | nindent 10 }}
-      {{- end }}
-      {{- if .Values.component.resources.grafana }}
+          {{- toYaml .Values.recommender.resources | nindent 10 }}
+        {{- end }}
       grafana:
+        image: "{{ .Values.grafana.image.repository }}:{{ .Values.grafana.image.tag }}"
+        imagePullPolicy: {{ .Values.grafana.image.pullPolicy }}
+        {{- if .Values.grafana.resources }}
         resources:
-          {{- toYaml .Values.component.resources.grafana | nindent 10 }}
-      {{- end }}
+          {{- toYaml .Values.grafana.resources | nindent 10 }}
+        {{- end }}
