@@ -428,6 +428,30 @@ spec:
                                     name, quantity) pairs.
                                   type: object
                               type: object
+                            targetUtilization:
+                              description: TargetUtilization
+                              properties:
+                                max:
+                                  additionalProperties:
+                                    anyOf:
+                                    - type: integer
+                                    - type: string
+                                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                    x-kubernetes-int-or-string: true
+                                  description: ResourceList is a set of (resource
+                                    name, quantity) pairs.
+                                  type: object
+                                min:
+                                  additionalProperties:
+                                    anyOf:
+                                    - type: integer
+                                    - type: string
+                                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                    x-kubernetes-int-or-string: true
+                                  description: ResourceList is a set of (resource
+                                    name, quantity) pairs.
+                                  type: object
+                              type: object
                             type:
                               description: Type defines where this bound should be
                                 applied to. Deprecated, use `Requests` or `Limits`
@@ -490,6 +514,30 @@ spec:
                                   type: object
                                 requests:
                                   description: Requests
+                                  properties:
+                                    max:
+                                      additionalProperties:
+                                        anyOf:
+                                        - type: integer
+                                        - type: string
+                                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                        x-kubernetes-int-or-string: true
+                                      description: ResourceList is a set of (resource
+                                        name, quantity) pairs.
+                                      type: object
+                                    min:
+                                      additionalProperties:
+                                        anyOf:
+                                        - type: integer
+                                        - type: string
+                                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                        x-kubernetes-int-or-string: true
+                                      description: ResourceList is a set of (resource
+                                        name, quantity) pairs.
+                                      type: object
+                                  type: object
+                                targetUtilization:
+                                  description: TargetUtilization
                                   properties:
                                     max:
                                       additionalProperties:
