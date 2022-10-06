@@ -1,0 +1,12 @@
+{{- if and .Values.grafana.enabled (or .Release.IsInstall .Values.grafana.forceGenerateConfigs) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards
+  labels:
+    {{- include "grafana.labels" . | nindent 4 }}
+  namespace: {{ include "optimize-live.namespace" . }}
+data:
+{{ (.Files.Glob "grafana/dashboards/*.json").AsConfig | indent 2 }}
+---
+{{- end }}

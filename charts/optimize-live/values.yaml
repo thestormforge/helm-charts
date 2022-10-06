@@ -44,10 +44,17 @@ recommender:
       memory: 100Mi
 
 grafana:
+  enabled: true
   image:
     repository: grafana/grafana-oss
     pullPolicy: IfNotPresent
     tag: 9.1.5
+  nameOverride: ""
+  port: "80"
+  targetPort: "3000"
+  # Flag to force the generation of configmap files for Grafana.
+  # Setting as true (without quotes) will rewrite configmaps when upgrading
+  forceGenerateConfigs: false
 
 image:
   repository: registry.stormforge.io/optimize-live/controller
