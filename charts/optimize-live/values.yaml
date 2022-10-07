@@ -52,9 +52,6 @@ grafana:
   nameOverride: ""
   port: "80"
   targetPort: "3000"
-  # Flag to force the generation of configmap files for Grafana.
-  # Setting as true (without quotes) will rewrite configmaps when upgrading
-  forceGenerateConfigs: false
 
 image:
   repository: registry.stormforge.io/optimize-live/controller

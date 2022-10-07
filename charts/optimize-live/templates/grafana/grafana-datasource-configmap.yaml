@@ -1,10 +1,10 @@
-{{- if and .Values.grafana.enabled .Release.IsInstall }}
+{{- if .Values.grafana.enabled  }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: grafana-datasource
   labels:
-    {{- include "grafana.labels" . | nindent 4 }}
+    component: grafana
   namespace: {{ include "optimize-live.namespace" . }}
 data:
   datasource.yaml: |

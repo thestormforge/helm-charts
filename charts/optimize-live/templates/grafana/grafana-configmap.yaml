@@ -1,4 +1,4 @@
-{{- if and .Values.grafana.enabled (or .Release.IsInstall .Values.grafana.forceGenerateConfigs) }}
+{{- if .Values.grafana.enabled  }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
