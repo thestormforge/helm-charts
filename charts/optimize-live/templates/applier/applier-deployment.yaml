@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       annotations:
-        configmapChecksum: {{ include (print $.Template.BasePath "/applier/applier-configmap.yaml") . | sha256sum }}
+        configChecksum: {{ include (print $.Template.BasePath "/applier/applier-configmap.yaml") . | sha256sum }}
       {{- with .Values.podAnnotations }}
       {{- toYaml . | nindent 8 }}
       {{- end }}
