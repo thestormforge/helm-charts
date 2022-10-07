@@ -18,6 +18,7 @@ tsdb:
       memory: 150Mi
 
 applier:
+  enabled: true
   image:
     repository: registry.stormforge.io/optimize-live/applier
     pullPolicy: IfNotPresent
@@ -29,6 +30,7 @@ applier:
     requests:
       cpu: 100m
       memory: 100Mi
+  nameOverride: ""
 
 recommender:
   image:

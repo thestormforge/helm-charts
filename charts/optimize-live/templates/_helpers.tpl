@@ -103,3 +103,31 @@ Create the namespace name
 {{- define "optimize-live.namespace" -}}
 {{- default .Values.defaultNamespace .Release.Namespace }}
 {{- end }}
+
+{{/*
+Applier name
+*/}}
+{{- define "applier.name" -}}
+{{- default "applier" .Values.applier.nameOverride }}
+{{- end }}
+
+{{/*
+Applier Common labels
+*/}}
+{{- define "applier.labels" -}}
+helm.sh/chart: {{ include "optimize-live.chart" . }}
+{{ include "applier.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Applier Selector labels
+*/}}
+{{- define "applier.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "applier.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+component: applier
+{{- end }}
