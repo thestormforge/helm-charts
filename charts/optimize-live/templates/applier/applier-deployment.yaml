@@ -15,8 +15,6 @@ spec:
     type: Recreate
   template:
     metadata:
-      annotations:
-        configChecksum: {{ include (print $.Template.BasePath "/applier/applier-configmap.yaml") . | sha256sum }}
       labels:
         {{- include "applier.selectorLabels" . | nindent 8 }}
         helm.sh/chart-version: {{ .Chart.Version }}

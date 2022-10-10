@@ -6,7 +6,5 @@ metadata:
   labels:
     {{- include "applier.labels" . | nindent 4 }}
   namespace: {{ include "optimize-live.namespace" . }}
-data:
-  config.yaml: |-
-    patches: []
+data: {}
 {{- end }}
