@@ -1,4 +1,4 @@
-{{- if and .Values.applier.enabled }}
+{{- if .Values.applier.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -7,4 +7,5 @@ metadata:
     {{- include "applier.labels" . | nindent 4 }}
   namespace: {{ include "optimize-live.namespace" . }}
 data: {}
+# "config.yaml" is a managed field by the optimize-live-controller
 {{- end }}

@@ -7,7 +7,6 @@ metadata:
     {{- include "applier.labels" . | nindent 4 }}
   namespace: {{ include "optimize-live.namespace" . }}
 spec:
-  replicas: 1
   selector:
     matchLabels:
       {{- include "applier.selectorLabels" . | nindent 6 }}
@@ -16,6 +15,7 @@ spec:
   template:
     metadata:
       annotations:
+        # "configChecksum" is a managed field by the optimize-live-controller
         secretChecksum: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
       labels:
         {{- include "applier.selectorLabels" . | nindent 8 }}
