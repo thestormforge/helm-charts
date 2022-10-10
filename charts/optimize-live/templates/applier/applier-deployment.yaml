@@ -17,9 +17,6 @@ spec:
     metadata:
       annotations:
         configChecksum: {{ include (print $.Template.BasePath "/applier/applier-configmap.yaml") . | sha256sum }}
-      {{- with .Values.podAnnotations }}
-      {{- toYaml . | nindent 8 }}
-      {{- end }}
       labels:
         {{- include "applier.selectorLabels" . | nindent 8 }}
         helm.sh/chart-version: {{ .Chart.Version }}
@@ -28,12 +25,8 @@ spec:
       imagePullSecrets:
       - name: {{ include "optimize-live.fullname" . }}-docker
       serviceAccountName: {{ include "optimize-live.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
       - name: {{ include "applier.name" . }}
-        securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
         image: {{ .Values.applier.image.repository }}:{{ .Values.applier.image.tag }}
         imagePullPolicy: {{ .Values.applier.image.pullPolicy }}
         resources:
@@ -47,16 +40,4 @@ spec:
           defaultMode: 420
           name: applier
         name: applierconfig
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
 {{- end }}
