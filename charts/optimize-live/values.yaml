@@ -30,7 +30,6 @@ applier:
     requests:
       cpu: 100m
       memory: 100Mi
-  nameOverride: ""
 
 recommender:
   image:

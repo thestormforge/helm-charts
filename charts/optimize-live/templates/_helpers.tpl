@@ -105,10 +105,10 @@ Create the namespace name
 {{- end }}
 
 {{/*
-Applier name
+Applier name, hardcoded for now since controller assumes this name atm
 */}}
 {{- define "applier.name" -}}
-{{- default "applier" .Values.applier.nameOverride }}
+{{- "applier" }}
 {{- end }}
 
 {{/*
