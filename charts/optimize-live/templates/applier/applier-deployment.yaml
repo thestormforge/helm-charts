@@ -15,7 +15,6 @@ spec:
   template:
     metadata:
       annotations:
-        # "configChecksum" is a managed field by the optimize-live-controller
         secretChecksum: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
       labels:
         {{- include "applier.selectorLabels" . | nindent 8 }}
@@ -30,9 +29,8 @@ spec:
         envFrom:
         - secretRef:
             name: {{ include "optimize-live.fullname" . }}
-        args:
-        - --config=/config.yaml
         {{- if .Values.debug }}
+        args:
         - --zap-log-level=9
         {{- end }}
         env:
@@ -44,13 +42,4 @@ spec:
         imagePullPolicy: {{ .Values.applier.image.pullPolicy }}
         resources:
             {{- toYaml .Values.applier.resources | nindent 12 }}
-        volumeMounts:
-        - mountPath: /config.yaml
-          name: applierconfig
-          subPath: config.yaml
-      volumes:
-      - configMap:
-          defaultMode: 420
-          name: applier
-        name: applierconfig
 {{- end }}
