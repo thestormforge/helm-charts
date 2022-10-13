@@ -2,12 +2,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "grafana.name" . }}
+  name: grafana
   labels:
     {{- include "grafana.labels" . | nindent 4 }}
   namespace: {{ include "optimize-live.namespace" . }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       {{- include "grafana.selectorLabels" . | nindent 6 }}
@@ -32,7 +32,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ include "grafana.name" . }}
+        - name: grafana
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ .Values.grafana.image.repository }}:{{ .Values.grafana.image.tag }}

@@ -40,7 +40,6 @@ helm.sh/chart: {{ include "optimize-live.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-component: controller
 {{- end }}
 
 {{/*
@@ -104,12 +103,6 @@ Create the namespace name
 {{- default .Values.defaultNamespace .Release.Namespace }}
 {{- end }}
 
-{{/*
-Grafana name
-*/}}
-{{- define "grafana.name" -}}
-{{- default "grafana" .Values.grafana.nameOverride }}
-{{- end }}
 
 {{/*
 Grafana Common labels
@@ -121,14 +114,13 @@ helm.sh/chart: {{ include "optimize-live.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-component: grafana
 {{- end }}
 
 {{/*
 Grafana Selector labels
 */}}
 {{- define "grafana.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "grafana.name" . }}
+app.kubernetes.io/name: grafana
 app.kubernetes.io/instance: {{ .Release.Name }}
 component: grafana
 {{- end }}
