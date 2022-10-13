@@ -40,7 +40,6 @@ helm.sh/chart: {{ include "optimize-live.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-component: controller
 {{- end }}
 
 {{/*
@@ -102,4 +101,40 @@ Create the namespace name
 */}}
 {{- define "optimize-live.namespace" -}}
 {{- default .Values.defaultNamespace .Release.Namespace }}
+{{- end }}
+
+
+{{/*
+Grafana Common labels
+*/}}
+{{- define "grafana.labels" -}}
+helm.sh/chart: {{ include "optimize-live.chart" . }}
+{{ include "grafana.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Grafana Selector labels
+*/}}
+{{- define "grafana.selectorLabels" -}}
+app.kubernetes.io/name: grafana
+app.kubernetes.io/instance: {{ .Release.Name }}
+component: grafana
+{{- end }}
+
+{{/*
+Grafana service port
+*/}}
+{{- define "grafana.servicePort" -}}
+{{- default "80" .Values.grafana.port }}
+{{- end }}
+
+{{/*
+Grafana service target port
+*/}}
+{{- define "grafana.serviceTargetPort" -}}
+{{- default "3000" .Values.grafana.targetPort }}
 {{- end }}

@@ -1,0 +1,1430 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 4,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
+        "description": "",
+        "gridPos": {
+          "h": 4,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 22,
+        "options": {
+          "content": "<div style=\"margin-top:2em;text-align:center;\">\n  <h1 >\n    StormForge Optimize Live\n  </h1>\n  <h3>\n    CPU Recommendations for ${workload}\n  </h3>\n</div>\n",
+          "mode": "html"
+        },
+        "pluginVersion": "",
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${application}"
+        },
+        "description": "Currently configured requests and limits, per container. Currently configured HPA target utilization for the workload.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 3,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "super-light-red",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "HPA Target"
+              },
+              "properties": [
+                {
+                  "id": "decimals"
+                },
+                {
+                  "id": "unit",
+                  "value": "percent"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 0,
+          "y": 4
+        },
+        "id": 15,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "value_and_name"
+        },
+        "pluginVersion": "",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "avg by (workload,namespace,resource,container) (requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\"})",
+            "format": "time_series",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "CPU Requests ({{container}})",
+            "range": true,
+            "refId": "Requests"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "avg by (workload,namespace,resource,container) (limits{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\"})",
+            "format": "time_series",
+            "instant": false,
+            "interval": "",
+            "legendFormat": "CPU Limits ({{container}})",
+            "range": true,
+            "refId": "Limits"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "avg(hpa{namespace=\"$namespace\",metric_name=\"cpu\",metric_target_type=\"utilization\",horizontalpodautoscaler=\"$workload\",application_name=\"$application\"})",
+            "format": "time_series",
+            "hide": false,
+            "instant": false,
+            "interval": "",
+            "legendFormat": "HPA Target",
+            "range": true,
+            "refId": "HPA Target"
+          }
+        ],
+        "title": "Current Settings",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${application}"
+        },
+        "description": "Recommended requests and limits, per container. Recommended HPA target utilization for the workload.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 3,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "blue",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "HPA Target"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "decimals"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 6,
+          "y": 4
+        },
+        "id": 14,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "value_and_name"
+        },
+        "pluginVersion": "",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "avg without (candidate) (recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\",metric=\"requests\",cpuRisk=\"$cpuRisk\"})",
+            "format": "time_series",
+            "hide": false,
+            "instant": false,
+            "interval": "",
+            "legendFormat": "CPU Requests ({{container}})",
+            "range": true,
+            "refId": "Requests"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "avg without (candidate) (recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\",metric=\"limits\",cpuRisk=\"$cpuRisk\"})",
+            "format": "time_series",
+            "instant": false,
+            "legendFormat": "CPU Limits ({{container}})",
+            "range": true,
+            "refId": "Limits"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "avg without (candidate) (recommendation{metric=\"target\",workload=~\"$workload\",namespace=~\"$namespace\",cpuRisk=\"$cpuRisk\"})",
+            "format": "time_series",
+            "hide": false,
+            "instant": false,
+            "interval": "",
+            "legendFormat": "HPA Target",
+            "range": true,
+            "refId": "HPA Target"
+          }
+        ],
+        "title": "Recommended Settings",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${application}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "mappings": [],
+            "max": 1,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "percentunit"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 12,
+          "y": 4
+        },
+        "id": 5,
+        "options": {
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": false
+        },
+        "pluginVersion": "",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "1 - avg(recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\",metric=\"requests\",cpuRisk=\"$cpuRisk\"}) / avg(requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\"})",
+            "format": "time_series",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Projected CPU Savings",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${application}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 3,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "none"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 6,
+          "x": 18,
+          "y": 4
+        },
+        "id": 4,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "value"
+        },
+        "pluginVersion": "",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "avg(replicas{workload=~\"$workload\",namespace=~\"$namespace\"}) * (\n    avg(requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\"}) \n    - \n    avg(recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\",metric=\"requests\",cpuRisk=\"$cpuRisk\"})\n)",
+            "format": "time_series",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "expr": "",
+            "hide": false,
+            "refId": "B"
+          }
+        ],
+        "title": "Projected core-hours savings (per hr)",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${application}"
+        },
+        "description": "Shows the sum total CPU utilization, sum total CPU requests, and sum total projected CPU requests after applying the recommended settings. This view includes and sums totals across all replicas.\n\nRed-shaded area represents over-provisioned requests, and blue-shaded area represents under-provisioned requests, relative to Optimize Live's recommendations.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "Cores",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "Utilization"
+              },
+              "properties": [
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 25
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "yellow",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "Requests"
+              },
+              "properties": [
+                {
+                  "id": "custom.fillBelowTo",
+                  "value": "Cumulative CPU Requests Projection (recommended settings)"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "red",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 15
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "Recommended Requests"
+              },
+              "properties": [
+                {
+                  "id": "custom.fillBelowTo",
+                  "value": "Total CPU Requests (All Replicas)"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "blue",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Number of Replicas"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "none"
+                },
+                {
+                  "id": "custom.lineStyle",
+                  "value": {
+                    "dash": [
+                      0,
+                      10
+                    ],
+                    "fill": "dot"
+                  }
+                },
+                {
+                  "id": "custom.axisLabel",
+                  "value": "Number of Replicas (dotted line)"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "text",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "Deploy Candidates"
+              },
+              "properties": [
+                {
+                  "id": "custom.showPoints",
+                  "value": "always"
+                }
+              ]
+            },
+            {
+              "__systemRef": "hideSeriesFrom",
+              "matcher": {
+                "id": "byNames",
+                "options": {
+                  "mode": "exclude",
+                  "names": [
+                    "Cumulative CPU Utilization",
+                    "Cumulative CPU Requests (current settings)",
+                    "Cumulative CPU Requests Projection (recommended settings)",
+                    "Number of Replicas"
+                  ],
+                  "prefix": "All except:",
+                  "readOnly": true
+                }
+              },
+              "properties": [
+                {
+                  "id": "custom.hideFrom",
+                  "value": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": true
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 11,
+          "w": 24,
+          "x": 0,
+          "y": 9
+        },
+        "id": 11,
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "max",
+              "min"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "expr": "avg by (workload,namespace,resource) (sum by (workload,namespace,resource) (usage{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\"}))",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "Cumulative CPU Utilization",
+            "range": true,
+            "refId": "Utilization"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "expr": "max by(namespace,workload) (requests{namespace=\"$namespace\",workload=\"$workload\",resource=\"cpu\"}) * max by(namespace,workload) (replicas{namespace=\"$namespace\",workload=\"$workload\"})",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "Cumulative CPU Requests (current settings)",
+            "range": true,
+            "refId": "Requests"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "expr": "max by(workload, namespace) (recommendation{metric=\"requests\",workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\",cpuRisk=\"$cpuRisk\"}) * max by (workload, namespace) (replicas{workload=~\"$workload\",namespace=~\"$namespace\"})",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "Cumulative CPU Requests Projection (recommended settings)",
+            "range": true,
+            "refId": "Recommended Requests"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "expr": "avg(replicas{workload=~\"$workload\",namespace=~\"$namespace\"})",
+            "hide": false,
+            "legendFormat": "Number of Replicas",
+            "range": true,
+            "refId": "Replicas"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "expr": "avg by(workload, namespace) (recommendation{metric=\"requests\",workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\",cpuRisk=\"$cpuRisk\"}) * avg by (workload, namespace) ((recommendation{metric=\"target\",workload=~\"$workload\",namespace=~\"$namespace\",cpuRisk=\"$cpuRisk\"}) / 100) * max by (workload, namespace) (replicas{workload=~\"$workload\",namespace=~\"$namespace\"})",
+            "hide": true,
+            "legendFormat": "Projected Utilization",
+            "range": true,
+            "refId": "Projected Utilization"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "expr": "avg by (workload,namespace,resource) (sum by (workload,namespace,resource) (requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\"}))",
+            "hide": true,
+            "legendFormat": "Total Requests Across Replicas",
+            "range": true,
+            "refId": "Requests (Actual)"
+          }
+        ],
+        "title": "Cumulative Utilization and Requests (CPU)",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
+        "description": "",
+        "gridPos": {
+          "h": 3,
+          "w": 24,
+          "x": 0,
+          "y": 20
+        },
+        "id": 29,
+        "options": {
+          "content": "<div style=\"margin-top:2em;text-align:center;\">\n  <h3>\n    Memory Recommendations for ${workload}\n  </h3>\n</div>",
+          "mode": "html"
+        },
+        "pluginVersion": "",
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${application}"
+        },
+        "description": "Currently configured requests and limits, per container.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "super-light-red",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "decbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 0,
+          "y": 23
+        },
+        "id": 27,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "value_and_name"
+        },
+        "pluginVersion": "",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "avg by (workload,namespace,resource,container) (requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\"})",
+            "format": "time_series",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "Memory Requests ({{container}})",
+            "range": true,
+            "refId": "Requests"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "avg by (workload,namespace,resource,container) (limits{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\"})",
+            "format": "time_series",
+            "instant": false,
+            "legendFormat": "Memory Limits ({{container}})",
+            "range": true,
+            "refId": "Limits"
+          }
+        ],
+        "title": "Current Settings",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${application}"
+        },
+        "description": "Recommended requests and limits, per container.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "blue",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "decbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 6,
+          "y": 23
+        },
+        "id": 28,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "horizontal",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "value_and_name"
+        },
+        "pluginVersion": "",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "avg without (candidate) (recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\",metric=\"requests\",cpuRisk=\"$cpuRisk\"})",
+            "format": "time_series",
+            "hide": false,
+            "instant": false,
+            "interval": "",
+            "legendFormat": "Memory Requests ({{container}})",
+            "range": true,
+            "refId": "Requests"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "avg without (candidate) (recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\",metric=\"limits\",cpuRisk=\"$cpuRisk\"})",
+            "format": "time_series",
+            "instant": false,
+            "interval": "",
+            "legendFormat": "Memory Limits ({{container}})",
+            "range": true,
+            "refId": "Limits"
+          }
+        ],
+        "title": "Recommended Settings",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${application}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "max": 1,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "percentunit"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 12,
+          "y": 23
+        },
+        "id": 7,
+        "options": {
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": false
+        },
+        "pluginVersion": "",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "1 - avg(recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\",metric=\"requests\",cpuRisk=\"$cpuRisk\"}) / avg(requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\"})",
+            "format": "time_series",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Projected Savings (Memory)",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${application}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "decbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 18,
+          "y": 23
+        },
+        "id": 8,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "auto"
+        },
+        "pluginVersion": "",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "avg(replicas{workload=~\"$workload\",namespace=~\"$namespace\"}) * (\n    avg(requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\"}) \n    - \n    avg(recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\",metric=\"requests\"})\n)",
+            "format": "time_series",
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Projected byte-hours savings (per hr)",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${application}"
+        },
+        "description": "Shows the sum total memory utilization, sum total memory requests, and sum total projected memory requests after applying the recommended settings. This view includes and sums totals across all replicas.\n\nRed-shaded area represents over-provisioned requests, and blue-shaded area represents under-provisioned requests, relative to Optimize Live's recommendations.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "Bytes",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "decbytes"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "Utilization"
+              },
+              "properties": [
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 25
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "yellow",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "Requests"
+              },
+              "properties": [
+                {
+                  "id": "custom.fillBelowTo",
+                  "value": "Cumulative Memory Requests Projection (recommended settings)"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "red",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 15
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "Recommended Requests"
+              },
+              "properties": [
+                {
+                  "id": "custom.fillBelowTo",
+                  "value": "Total Memory Requests (All Replicas)"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "blue",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Number of Replicas"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "none"
+                },
+                {
+                  "id": "custom.axisLabel",
+                  "value": "Number of Replicas (dotted line)"
+                },
+                {
+                  "id": "custom.lineStyle",
+                  "value": {
+                    "dash": [
+                      0,
+                      10
+                    ],
+                    "fill": "dot"
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "text",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 12,
+          "w": 24,
+          "x": 0,
+          "y": 27
+        },
+        "id": 9,
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull",
+              "max",
+              "min"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "exemplar": true,
+            "expr": "avg by (workload,namespace,resource) (sum by (workload,namespace,resource) (usage{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\"}))",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "Cumulative Memory Utilization",
+            "range": true,
+            "refId": "Utilization"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "exemplar": true,
+            "expr": "avg by(workload,namespace) (requests{namespace=\"$namespace\",workload=\"$workload\",resource=\"memory\"}) * max by(namespace,workload) (replicas{namespace=\"$namespace\",workload=\"$workload\"})",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "Cumulative Memory Requests (current settings)",
+            "range": true,
+            "refId": "Requests"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "exemplar": true,
+            "expr": "max by(workload, namespace) (recommendation{metric=\"requests\",workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\",memoryRisk=\"$memoryRisk\"}) * max by (workload, namespace) (replicas{workload=~\"$workload\",namespace=~\"$namespace\"})",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "Cumulative Memory Requests Projection (recommended settings)",
+            "range": true,
+            "refId": "Recommended Requests"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${application}"
+            },
+            "editorMode": "code",
+            "expr": "avg(replicas{workload=~\"$workload\",namespace=~\"$namespace\"})",
+            "hide": false,
+            "legendFormat": "Number of Replicas",
+            "range": true,
+            "refId": "Replicas"
+          }
+        ],
+        "title": "Cumulative Utilization and Requests (Memory)",
+        "type": "timeseries"
+      }
+    ],
+    "refresh": false,
+    "schemaVersion": 37,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "HPA Demo",
+            "value": "HPA Demo"
+          },
+          "hide": 0,
+          "includeAll": false,
+          "label": "Application",
+          "multi": false,
+          "name": "application",
+          "options": [],
+          "query": "prometheus",
+          "queryValue": "",
+          "refresh": 2,
+          "regex": "",
+          "skipUrlSync": false,
+          "type": "datasource"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "demo-hpa",
+            "value": "demo-hpa"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${application}"
+          },
+          "definition": "label_values(namespace)",
+          "hide": 0,
+          "includeAll": false,
+          "label": "Namespace",
+          "multi": false,
+          "name": "namespace",
+          "options": [],
+          "query": {
+            "query": "label_values(namespace)",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 2,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 1,
+          "tagValuesQuery": "",
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "frontend",
+            "value": "frontend"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${application}"
+          },
+          "definition": "label_values(workload)",
+          "hide": 0,
+          "includeAll": false,
+          "label": "Workload",
+          "multi": false,
+          "name": "workload",
+          "options": [],
+          "query": {
+            "query": "label_values(workload)",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 2,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 1,
+          "tagValuesQuery": "",
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "high",
+            "value": "high"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${application}"
+          },
+          "definition": "label_values(cpuRisk)",
+          "hide": 0,
+          "includeAll": false,
+          "label": "CPU Tolerance",
+          "multi": false,
+          "name": "cpuRisk",
+          "options": [],
+          "query": {
+            "query": "label_values(cpuRisk)",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 2,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 1,
+          "type": "query"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "low",
+            "value": "low"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${application}"
+          },
+          "definition": "label_values(memoryRisk)",
+          "hide": 0,
+          "includeAll": false,
+          "label": "Memory Tolerance",
+          "multi": false,
+          "name": "memoryRisk",
+          "options": [],
+          "query": {
+            "query": "label_values(memoryRisk)",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 2,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 1,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-3h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Optimize Live - HPA",
+    "uid": "d_AhnIjnz",
+    "version": 7,
+    "weekStart": ""
+  }

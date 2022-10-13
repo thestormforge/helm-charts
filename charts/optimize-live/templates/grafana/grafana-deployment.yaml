@@ -1,0 +1,105 @@
+{{- if .Values.grafana.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  labels:
+    {{- include "grafana.labels" . | nindent 4 }}
+  namespace: {{ include "optimize-live.namespace" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "grafana.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        configmapChecksum: {{ include (print $.Template.BasePath "/grafana/grafana-configmap.yaml") . | sha256sum }}
+        providersChecksum: {{ include (print $.Template.BasePath "/grafana/grafana-providers-configmap.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "grafana.selectorLabels" . | nindent 8 }}
+        helm.sh/chart-version: {{ .Chart.Version }}
+    spec:
+      enableServiceLinks: false
+      imagePullSecrets:
+        - name: {{ include "optimize-live.fullname" . }}-docker
+      serviceAccountName: {{ include "optimize-live.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: grafana
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ .Values.grafana.image.repository }}:{{ .Values.grafana.image.tag }}
+          imagePullPolicy: {{ .Values.grafana.image.pullPolicy }}
+          livenessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /api/health
+              port: {{ include "grafana.serviceTargetPort" . }}
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 30
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/health
+              port: {{ include "grafana.serviceTargetPort" . }}
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            {{- toYaml .Values.grafana.resources | nindent 12 }}
+          volumeMounts:
+          - mountPath: /etc/grafana/grafana.ini
+            name: grafanaconfig
+            subPath: grafana.ini
+          - mountPath: /var/lib/grafana
+            name: data
+          - mountPath: /etc/grafana/provisioning/dashboards
+            name: grafanaproviders
+          - mountPath: /etc/grafana/provisioning/datasources
+            name: grafanadatasource
+          - mountPath: /var/lib/grafana/dashboards
+            name: grafanadashboards
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: grafana
+        name: grafanaconfig
+      - configMap:
+          defaultMode: 420
+          name: grafana-providers
+        name: grafanaproviders
+      - configMap:
+          defaultMode: 420
+          name: grafana-datasource
+        name: grafanadatasource
+      - configMap:
+          defaultMode: 420
+          name: grafana-dashboards
+        name: grafanadashboards
+      - emptyDir:
+          sizeLimit: 100M
+        name: data
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
