@@ -40,6 +40,10 @@ spec:
               fieldPath: metadata.labels['helm.sh/chart-version']
         image: {{ .Values.applier.image.repository }}:{{ .Values.applier.image.tag }}
         imagePullPolicy: {{ .Values.applier.image.pullPolicy }}
+        livenessProbe:
+          {{- toYaml .Values.applier.livenessProbe | nindent 10 }}
+        readinessProbe:
+          {{- toYaml .Values.applier.readinessProbe | nindent 10 }}
         resources:
-            {{- toYaml .Values.applier.resources | nindent 12 }}
+          {{- toYaml .Values.applier.resources | nindent 10 }}
 {{- end }}
