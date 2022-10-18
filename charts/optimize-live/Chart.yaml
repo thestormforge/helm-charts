@@ -26,3 +26,5 @@ icon: https://app.stormforge.io/img/logo.png
 home: https://www.stormforge.io/
 maintainers:
 - name: grambot
+
+kubeVersion: '>=1.18.0-0'
