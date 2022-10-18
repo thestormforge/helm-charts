@@ -285,6 +285,7 @@
           "type": "prometheus",
           "uid": "${application}"
         },
+        "description": "Average CPU request savings, as a percentage difference, over the time period selected, had the recommended settings been in use",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -323,7 +324,8 @@
             "values": false
           },
           "showThresholdLabels": false,
-          "showThresholdMarkers": false
+          "showThresholdMarkers": false,
+          "text": {}
         },
         "pluginVersion": "",
         "targets": [
@@ -334,15 +336,16 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "1 - avg(recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\",metric=\"requests\",cpuRisk=\"$cpuRisk\"}) / avg(requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\"})",
+            "expr": "1\n-\nmax by (namespace,workload) (avg_over_time(\n  recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\",metric=\"requests\",cpuRisk=\"$cpuRisk\"}[$__range]))\n/\nmax by (namespace,workload) (avg_over_time(\n  requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\"}[$__range]))",
             "format": "time_series",
             "instant": false,
+            "interval": "",
             "legendFormat": "__auto",
             "range": true,
             "refId": "A"
           }
         ],
-        "title": "Projected CPU Savings",
+        "title": "Projected CPU Requests Savings",
         "type": "gauge"
       },
       {
@@ -350,6 +353,7 @@
           "type": "prometheus",
           "uid": "${application}"
         },
+        "description": "Average projected CPU request savings, in cores, over the time period selected, had the recommended settings been in use",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -389,6 +393,7 @@
             "fields": "",
             "values": false
           },
+          "text": {},
           "textMode": "value"
         },
         "pluginVersion": "",
@@ -400,24 +405,16 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "avg(replicas{workload=~\"$workload\",namespace=~\"$namespace\"}) * (\n    avg(requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\"}) \n    - \n    avg(recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\",metric=\"requests\",cpuRisk=\"$cpuRisk\"})\n)",
+            "expr": "avg_over_time((\n  max by (workload,namespace) (replicas{workload=~\"$workload\",namespace=~\"$namespace\"})\n  *\n  ( max by (workload,namespace) (requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\"}) \n    -\n    max by (workload,namespace) (recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\",metric=\"requests\",cpuRisk=\"$cpuRisk\"}))\n)[$__range:$__interval])",
             "format": "time_series",
             "instant": false,
+            "interval": "",
             "legendFormat": "__auto",
             "range": true,
             "refId": "A"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "${application}"
-            },
-            "expr": "",
-            "hide": false,
-            "refId": "B"
           }
         ],
-        "title": "Projected core-hours savings (per hr)",
+        "title": "Projected CPU Core-Requests Savings",
         "type": "stat"
       },
       {
@@ -909,6 +906,7 @@
           "type": "prometheus",
           "uid": "${application}"
         },
+        "description": "Average projected memory request savings, as a percentage, over the time period selected, had the recommended settings been in use",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -958,7 +956,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "1 - avg(recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\",metric=\"requests\",cpuRisk=\"$cpuRisk\"}) / avg(requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\"})",
+            "expr": "1\n-\nmax by (namespace,workload) (avg_over_time(\n  recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\",metric=\"requests\",cpuRisk=\"$cpuRisk\"}[$__range]))\n/\nmax by (namespace,workload) (avg_over_time(\n  requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\"}[$__range]))",
             "format": "time_series",
             "instant": false,
             "legendFormat": "__auto",
@@ -966,7 +964,7 @@
             "refId": "A"
           }
         ],
-        "title": "Projected Savings (Memory)",
+        "title": "Projected Memory Requests Savings",
         "type": "gauge"
       },
       {
@@ -974,6 +972,7 @@
           "type": "prometheus",
           "uid": "${application}"
         },
+        "description": "Average projected memory request savings, in bytes, over the time period selected, had the recommended settings been in use",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -1023,7 +1022,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "avg(replicas{workload=~\"$workload\",namespace=~\"$namespace\"}) * (\n    avg(requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\"}) \n    - \n    avg(recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\",metric=\"requests\"})\n)",
+            "expr": "avg_over_time((\n  max by (workload,namespace) (replicas{workload=~\"$workload\",namespace=~\"$namespace\"})\n  *\n  ( max by (workload,namespace) (requests{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\"}) \n    -\n    max by (workload,namespace) (recommendation{workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\",metric=\"requests\",cpuRisk=\"$cpuRisk\"}))\n)[$__range:$__interval])",
             "format": "time_series",
             "instant": false,
             "legendFormat": "__auto",
@@ -1031,7 +1030,7 @@
             "refId": "A"
           }
         ],
-        "title": "Projected byte-hours savings (per hr)",
+        "title": "Projected Memory Byte-Requests Savings",
         "type": "stat"
       },
       {
