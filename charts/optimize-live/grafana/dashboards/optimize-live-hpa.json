@@ -568,6 +568,10 @@
                     "fixedColor": "text",
                     "mode": "fixed"
                   }
+                },
+                {
+                  "id": "decimals",
+                  "value": 0
                 }
               ]
             },
@@ -668,7 +672,7 @@
               "uid": "${application}"
             },
             "editorMode": "code",
-            "expr": "max by(workload, namespace) (recommendation{metric=\"requests\",workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\",cpuRisk=\"$cpuRisk\"}) * max by (workload, namespace) (replicas{workload=~\"$workload\",namespace=~\"$namespace\"})",
+            "expr": "max by(namespace,workload) (replicas{namespace=\"$namespace\",workload=\"$workload\"}) * scalar(last_over_time(recommendation{metric=\"requests\",workload=~\"$workload\",namespace=~\"$namespace\",resource=\"cpu\",cpuRisk=\"$cpuRisk\",candidate=\"deploy\"}[95m]))",
             "hide": false,
             "interval": "",
             "legendFormat": "Cumulative CPU Requests Projection (recommended settings)",
@@ -1186,6 +1190,10 @@
                     "fixedColor": "text",
                     "mode": "fixed"
                   }
+                },
+                {
+                  "id": "decimals",
+                  "value": 0
                 }
               ]
             }
@@ -1251,7 +1259,7 @@
             },
             "editorMode": "code",
             "exemplar": true,
-            "expr": "max by(workload, namespace) (recommendation{metric=\"requests\",workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\",memoryRisk=\"$memoryRisk\"}) * max by (workload, namespace) (replicas{workload=~\"$workload\",namespace=~\"$namespace\"})",
+            "expr": "max by(namespace,workload) (replicas{namespace=\"$namespace\",workload=\"$workload\"}) * scalar(last_over_time(recommendation{metric=\"requests\",workload=~\"$workload\",namespace=~\"$namespace\",resource=\"memory\",memoryRisk=\"$memoryRisk\",candidate=\"deploy\"}[95m]))",
             "hide": false,
             "interval": "",
             "legendFormat": "Cumulative Memory Requests Projection (recommended settings)",
