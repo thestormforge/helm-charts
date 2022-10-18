@@ -34,7 +34,7 @@ recommender:
   image:
     repository: registry.stormforge.io/optimize-live/recommender
     pullPolicy: IfNotPresent
-    tag: 0.3.4-rc4
+    tag: 0.3.4
   resources:
     limits:
       cpu: 2000m
