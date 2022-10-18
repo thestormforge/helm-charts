@@ -61,6 +61,12 @@ spec:
           - name: DEBUG
             value: "debug"
 {{- end }}
+          - name: CLUSTER_ROLE_BINDING_NAME
+            value: {{ include "optimize-live.clusterRoleBindingName" . }}
+{{ if .Values.rbac.additional }}
+          - name: ADDITIONAL_CLUSTER_ROLE_BINDING_NAME
+            value: {{ include "optimize-live.clusterRoleBindingName" . }}-additional
+{{- end }}
           - name: CONTROLLER_NAMESPACE
             valueFrom:
               fieldRef:
