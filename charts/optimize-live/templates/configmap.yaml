@@ -29,6 +29,19 @@ data:
         resources:
           {{- toYaml .Values.tsdb.resources | nindent 10 }}
         {{- end }}
+        {{- if .Values.tsdb.nodeSelector }}
+        nodeSelector:
+          {{- toYaml .Values.tsdb.nodeSelector | nindent 10 }}
+        {{- end }}
+        {{- if .Values.tsdb.tolerations }}
+        tolerations:
+          {{- toYaml .Values.tsdb.tolerations | nindent 8 }}
+        {{- end }}
+        {{- if .Values.tsdb.affinity }}
+        affinity:
+          {{- toYaml .Values.tsdb.affinity | nindent 10 }}
+        {{- end }}
+    
       applier:
         image: "{{ .Values.applier.image.repository }}:{{ .Values.applier.image.tag }}"
         imagePullPolicy: {{ .Values.applier.image.pullPolicy }}
@@ -36,6 +49,19 @@ data:
         resources:
           {{- toYaml .Values.applier.resources | nindent 10 }}
         {{- end }}
+        {{- if .Values.applier.nodeSelector }}
+        nodeSelector:
+          {{- toYaml .Values.applier.nodeSelector | nindent 10 }}
+        {{- end }}
+        {{- if .Values.applier.tolerations }}
+        tolerations:
+          {{- toYaml .Values.applier.tolerations | nindent 8 }}
+        {{- end }}
+        {{- if .Values.applier.affinity }}
+        affinity:
+          {{- toYaml .Values.applier.affinity | nindent 10 }}
+        {{- end }}
+    
       recommender:
         image: "{{ .Values.recommender.image.repository }}:{{ .Values.recommender.image.tag }}"
         imagePullPolicy: {{ .Values.recommender.image.pullPolicy }}
@@ -43,10 +69,15 @@ data:
         resources:
           {{- toYaml .Values.recommender.resources | nindent 10 }}
         {{- end }}
-      grafana:
-        image: "{{ .Values.grafana.image.repository }}:{{ .Values.grafana.image.tag }}"
-        imagePullPolicy: {{ .Values.grafana.image.pullPolicy }}
-        {{- if .Values.grafana.resources }}
-        resources:
-          {{- toYaml .Values.grafana.resources | nindent 10 }}
+        {{- if .Values.recommender.nodeSelector }}
+        nodeSelector:
+          {{- toYaml .Values.recommender.nodeSelector | nindent 10 }}
+        {{- end }}
+        {{- if .Values.recommender.tolerations }}
+        tolerations:
+          {{- toYaml .Values.recommender.tolerations | nindent 8 }}
+        {{- end }}
+        {{- if .Values.recommender.affinity }}
+        affinity:
+          {{- toYaml .Values.recommender.affinity | nindent 10 }}
         {{- end }}
