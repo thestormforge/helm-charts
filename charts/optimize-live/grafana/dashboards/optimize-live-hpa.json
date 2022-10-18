@@ -568,45 +568,10 @@
                     "fixedColor": "text",
                     "mode": "fixed"
                   }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byFrameRefID",
-                "options": "Deploy Candidates"
-              },
-              "properties": [
+                },
                 {
-                  "id": "custom.showPoints",
-                  "value": "always"
-                }
-              ]
-            },
-            {
-              "__systemRef": "hideSeriesFrom",
-              "matcher": {
-                "id": "byNames",
-                "options": {
-                  "mode": "exclude",
-                  "names": [
-                    "Cumulative CPU Utilization",
-                    "Cumulative CPU Requests (current settings)",
-                    "Cumulative CPU Requests Projection (recommended settings)",
-                    "Number of Replicas"
-                  ],
-                  "prefix": "All except:",
-                  "readOnly": true
-                }
-              },
-              "properties": [
-                {
-                  "id": "custom.hideFrom",
-                  "value": {
-                    "legend": false,
-                    "tooltip": false,
-                    "viz": true
-                  }
+                  "id": "decimals",
+                  "value": 0
                 }
               ]
             }
@@ -1186,6 +1151,10 @@
                     "fixedColor": "text",
                     "mode": "fixed"
                   }
+                },
+                {
+                  "id": "decimals",
+                  "value": 0
                 }
               ]
             }
