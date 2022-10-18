@@ -568,6 +568,10 @@
                     "fixedColor": "text",
                     "mode": "fixed"
                   }
+                },
+                {
+                  "id": "decimals",
+                  "value": 0
                 }
               ]
             }
@@ -1147,6 +1151,10 @@
                     "fixedColor": "text",
                     "mode": "fixed"
                   }
+                },
+                {
+                  "id": "decimals",
+                  "value": 0
                 }
               ]
             }
