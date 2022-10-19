@@ -90,16 +90,16 @@ spec:
       - emptyDir:
           sizeLimit: 100M
         name: data
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.grafana.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.grafana.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.grafana.tolerations }}
       tolerations:
-        {{- toYaml . | nindent 8 }}
+        {{- toYaml . | nindent 6 }}
       {{- end }}
 {{- end }}

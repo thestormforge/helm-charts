@@ -14,6 +14,9 @@ tsdb:
     requests:
       cpu: 150m
       memory: 150Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
 applier:
   image:
@@ -27,6 +30,9 @@ applier:
     requests:
       cpu: 100m
       memory: 100Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
 recommender:
   image:
@@ -40,6 +46,9 @@ recommender:
     requests:
       cpu: 100m
       memory: 100Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
 grafana:
   enabled: true
@@ -47,6 +56,9 @@ grafana:
     repository: grafana/grafana-oss
     pullPolicy: IfNotPresent
     tag: 9.1.5
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
   port: "80"
   targetPort: "3000"
 
