@@ -84,11 +84,19 @@ trialJobs:
   perftest:
     image:
       repository: thestormforge/optimize-trials
-      tag: v0.0.3-stormforge-perf
+      tag: v0.0.5-stormforge-perf
   locust:
     image:
       repository: thestormforge/optimize-trials
-      tag: v0.0.3-locust
+      tag: v0.0.5-locust
+  k6:
+    image:
+      repository: thestormforge/optimize-trials
+      tag: v0.0.5-k6
+  jmeter:
+    image:
+      repository: thestormforge/optimize-trials
+      tag: v0.0.5-jmeter
 EOF
 
 # values.schema.json
