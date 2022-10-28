@@ -8,7 +8,7 @@ tsdb:
   image:
     repository: registry.stormforge.io/optimize-live/tsdb
     pullPolicy: IfNotPresent
-    tag: 0.0.14
+    tag: 0.0.15
   resources:
     limits:
       cpu: 2500m    # CPU peaks during backlog filling
@@ -21,7 +21,7 @@ applier:
   image:
     repository: registry.stormforge.io/optimize-live/applier
     pullPolicy: IfNotPresent
-    tag: 0.0.8
+    tag: 0.0.9
   resources:
     limits:
       cpu: 200m
