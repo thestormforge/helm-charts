@@ -21,7 +21,7 @@ applier:
   image:
     repository: registry.stormforge.io/optimize-live/applier
     pullPolicy: IfNotPresent
-    tag: 0.0.9
+    tag: 0.0.10
   resources:
     limits:
       cpu: 200m
@@ -34,7 +34,7 @@ recommender:
   image:
     repository: registry.stormforge.io/optimize-live/recommender
     pullPolicy: IfNotPresent
-    tag: 0.3.6
+    tag: 0.3.8
   resources:
     limits:
       cpu: 2000m
