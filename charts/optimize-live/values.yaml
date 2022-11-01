@@ -52,7 +52,7 @@ grafana:
 image:
   repository: registry.stormforge.io/optimize-live/controller
   pullPolicy: IfNotPresent
-  tag: 0.0.22
+  tag: 0.0.23
 
 imagePullSecrets: []
 nameOverride: ""
