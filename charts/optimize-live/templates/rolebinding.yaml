@@ -1,3 +1,4 @@
+{{ if .Values.clusterRoleBinding }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -13,7 +14,7 @@ subjects:
 - kind: ServiceAccount
   name: {{ include "optimize-live.serviceAccountName" . }}
   namespace: {{ include "optimize-live.namespace" . }}
-
+{{ end }}
 {{ if .Values.rbac.additional }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
