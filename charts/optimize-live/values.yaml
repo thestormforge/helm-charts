@@ -34,7 +34,7 @@ recommender:
   image:
     repository: registry.stormforge.io/optimize-live/recommender
     pullPolicy: IfNotPresent
-    tag: 0.3.10-rc1
+    tag: 0.3.10-rc2
   resources:
     limits:
       cpu: 2000m
@@ -52,7 +52,7 @@ grafana:
 image:
   repository: registry.stormforge.io/optimize-live/controller
   pullPolicy: IfNotPresent
-  tag: 0.0.24
+  tag: 0.0.25-rc4
 
 imagePullSecrets: []
 nameOverride: ""
@@ -162,4 +162,4 @@ storageClass: ""
  # This defaults to 10G
 pvcSize: ""
 
-debug: false
+debug: true

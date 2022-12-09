@@ -40,6 +40,7 @@ spec:
                 properties:
                   appID:
                     description: ULID
+                    pattern: ^[a-z\d]([-a-z\d]*[a-z\d])?$
                     type: string
                   appName:
                     description: Friendly Name
