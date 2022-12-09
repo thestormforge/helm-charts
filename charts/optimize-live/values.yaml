@@ -162,4 +162,4 @@ storageClass: ""
  # This defaults to 10G
 pvcSize: ""
 
-debug: true
+debug: false
