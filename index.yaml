@@ -291,6 +291,21 @@ entries:
   optimize-live:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2022-12-15T16:04:11.610880178Z"
+    description: StormForge Optimize Live applies machine learning to your existing observability metrics to make real-time, actionable recommendations to resource settings for any deployment running in Kubernetes
+    digest: 48b8bdaf31cd0e6db1bf6c9d6e6d1d4dd2efa8229b4c0a87ddf8cbe8e9d1d269
+    home: https://www.stormforge.io/
+    icon: https://app.stormforge.io/img/logo.png
+    kubeVersion: '>=1.18.0-0'
+    maintainers:
+    - name: grambot
+    name: optimize-live
+    type: application
+    urls:
+    - https://github.com/thestormforge/helm-charts/releases/download/optimize-live-0.7.1/optimize-live-0.7.1.tgz
+    version: 0.7.1
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2022-12-09T20:29:12.150220066Z"
     description: StormForge Optimize Live applies machine learning to your existing observability metrics to make real-time, actionable recommendations to resource settings for any deployment running in Kubernetes
     digest: b05e99c50b4226d5a37065123f3ba5b653dcf14396e3d2f730ae447315be1a84
