@@ -8,7 +8,7 @@ tsdb:
   image:
     repository: registry.stormforge.io/optimize-live/tsdb
     pullPolicy: IfNotPresent
-    tag: 0.0.20
+    tag: 0.0.21
   resources:
     limits:
       cpu: 2500m    # CPU peaks during backlog filling
@@ -34,7 +34,7 @@ recommender:
   image:
     repository: registry.stormforge.io/optimize-live/recommender
     pullPolicy: IfNotPresent
-    tag: 0.3.16
+    tag: 0.3.17
   resources:
     limits:
       cpu: 2000m
@@ -52,7 +52,7 @@ grafana:
 image:
   repository: registry.stormforge.io/optimize-live/controller
   pullPolicy: IfNotPresent
-  tag: 0.0.30
+  tag: 0.0.31
 
 imagePullSecrets: []
 nameOverride: ""
