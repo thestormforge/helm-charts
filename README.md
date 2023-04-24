@@ -1,15 +1,3 @@
-# StormForge - Helm Charts
+# StormForge - Legacy Helm Charts
 
-## How do I use this chart repository?
-
-```shell
-helm repo add stormforge https://registry.stormforge.io/chartrepo/library/
-```
-
-For additional instructions, view the [repository home page](https://thestormforge.github.io/helm-charts/).
-
-## Development
-
-This repository contains a `main` branch and a `gh-pages` branch: the `main` branch contains the source for the latest (potentially unreleased) version of the chart; the `gh-pages` branch contains a mirror of the Helm repository.
-
-The [Helm Chart Releaser](https://github.com/marketplace/actions/helm-chart-releaser) Action is used to keep the the Helm repository on the `gh-pages` branch up to date.
+This repository contains source for legacy StormForge products, for the most up-to-date information regarding product installation, please refer to the [documentation](https://docs.stormforge.io/).
