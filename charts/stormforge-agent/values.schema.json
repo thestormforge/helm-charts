@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "required": ["stormforge"],
+  "properties": {
+    "stormforge": {
+      "type": "object",
+      "properties": {
+        "clusterName": {
+          "type": ["null","string"],
+          "pattern": "^[a-z0-9]+[a-z0-9-]*$",
+          "description": "A uniquely identifying name for the Kubernetes cluster"
+        },
+        "address": {
+          "type": "string"
+        },
+        "additionalProperties": false
+      }
+    },
+    "authorization": {
+      "type": "object",
+      "properties": {
+        "clientID": {
+          "type": "string",
+          "pattern": "^[^\n]+$"
+        },
+        "clientSecret": {
+          "type": "string",
+          "pattern": "^[^\n]+$"
+        },
+        "issuer": {
+          "type": "string",
+          "pattern": "^[^\n]+$"
+        },
+        "additionalProperties": false
+      }
+    },
+    "proxyUrl": {
+      "type": "string",
+      "description": "Configuration for HTTPS_PROXY environment variable"
+    },
+    "noProxy": {
+      "type": "string",
+      "description": "Configuration for NO_PROXY environment variable"
+    },
+    "imagePullSecrets": {
+      "type": "array",
+      "description": "Image Pull Secrets required for pulling stormforge images",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "resetSecret": {
+      "type": "boolean",
+      "description": "If true, overwrite the existing stormforge-agent secret, and do not re-use any of its values"
+    },
+    "workload": {
+      "type": "object",
+      "properties": {
+        "autoDiscovery": {
+          "type": "boolean",
+          "description": "Automatically discover workloads that can be optimized. It works in conjuction with WorkloadOptimizer CRD"
+        },
+        "workloadSyncInterval": {
+          "type": "string",
+          "description": "Interval the agent will update probeTime for each existent workload."
+        },
+        "collectLabels": {
+          "type": "boolean",
+          "description": "Collect labels of the cluster's workloads."
+        }
+      }
+    },
+    "prom": {
+      "type": "object",
+      "properties": {
+        "image": { "type": "object" },
+        "proxy": { "type": "object" },
+        "remoteWriteUrl": { "type": "string" },
+        "resources": { "type": "object" },
+        "scrapeTimeout": { "type": "string" },
+        "remoteTimeout": { "type": "string" },
+        "retentionMaxTime": { "type": "string" },
+        "retentionMinTime": { "type": "string" },
+        "tokenUrl": { "type": "string" },
+        "remoteWriteQueueConfig": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "extraEnvVars": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "x-kubernetes-patch-merge-key": "name",
+      "x-kubernetes-patch-strategy": "merge"
+    }
+  },
+  "additionalProperties": true
+}

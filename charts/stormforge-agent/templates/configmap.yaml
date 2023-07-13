@@ -1,0 +1,128 @@
+{{- $scopeForRecycleFn := include "stormforge-agent.scopeForRecycleFn" . | fromJson -}}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "stormforge-agent.fullname" . }}
+  labels:
+    {{- include "stormforge-agent.labels" . | nindent 4 }}
+  namespace: {{ .Release.Namespace }}
+data:
+  workload-agent.yml: |
+    apiVersion: optimize.stormforge.io/v1
+    kind: AgentConfig
+    autoDiscovery: "{{ .Values.workload.autoDiscovery }}"
+    {{- with .Values.workload.allowNamespaces }}
+    allowNamespaces:
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with .Values.workload.denyNamespaces }}
+    denyNamespaces:
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- if .Values.workload.workloadSyncInterval }}
+    workloadSyncInterval: {{ .Values.workload.workloadSyncInterval }}
+    {{- end }}
+    {{- if .Values.workload.collectLabels }}
+    collectLabels: {{ .Values.workload.collectLabels }}
+    {{- end }}
+
+
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      scrape_timeout: {{ .Values.prom.scrapeTimeout }}
+      external_labels:
+        cluster_name: {{ include "stormforge-agent.recycle.clusterName" $scopeForRecycleFn }}
+
+    remote_write:
+      - url: {{ .Values.prom.remoteWriteUrl }}
+        name: application
+        {{- if .Values.prom.remoteTimeout }}
+        remote_timeout: {{ .Values.prom.remoteTimeout }}
+        {{- end }}
+        proxy_from_environment: true
+        oauth2:
+          proxy_from_environment: true
+          client_id: {{ include "stormforge-agent.recycle.clientID" $scopeForRecycleFn }}
+          client_secret_file: /mnt/client_secret_file
+          token_url: {{ .Values.prom.tokenUrl }}
+          endpoint_params:
+            audience: {{ .Values.stormforge.address }}
+            grantType: client_credentials
+        queue_config:
+          {{- toYaml .Values.prom.remoteWriteQueueConfig | nindent 10 }}
+
+    scrape_configs:
+      - job_name: 'kubernetes-cadvisor'
+        scheme: https
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        kubernetes_sd_configs:
+          - role: node
+        honor_timestamps: false
+        relabel_configs:
+          - action: labelmap
+            regex: __meta_kubernetes_node_label_(.+)
+          - target_label: __address__
+            replacement: kubernetes.default.svc:443
+          - source_labels: [__meta_kubernetes_node_name]
+            regex: (.+)
+            target_label: __metrics_path__
+            replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor
+        metric_relabel_configs:
+        # Limit input to only these metrics
+        - regex: ^container_cpu_usage_seconds_total|container_memory_working_set_bytes$
+          source_labels: [ __name__ ]
+          action: keep
+        # That contain a 'container' label
+        - source_labels: [ container ]
+          regex: (POD)|
+          action: drop
+        # That contain a 'pod' label
+        - source_labels: [ pod ]
+          regex: |
+          action: drop
+        # That contain a 'image' label
+        - source_labels: [ image ]
+          regex: |
+          action: drop
+        # That contain a 'name' label
+        - source_labels: [ name ]
+          regex: |
+          action: drop
+        # Filter by these namespaces
+        - source_labels: [ namespace ]
+{{- if gt (len .Values.workload.allowNamespaces) 0 }}
+          regex: ({{ .Values.workload.allowNamespaces | join "|" }})
+          action: keep
+{{- end }}
+{{- if and (gt (len .Values.workload.denyNamespaces) 0)  (eq (len .Values.workload.allowNamespaces) 0) }}
+          regex: ({{ .Values.workload.denyNamespaces | join "|" }})
+          action: drop
+{{- end }}
+        # And keep these labels
+        - regex: {{ include "stormforge-agent.workload.labels-to-keep" . }}
+          action: labelkeep
+      - job_name: workload-agent
+        scrape_interval: 2m
+        scheme: http
+        static_configs:
+        - targets:
+          - localhost:8080
+        metric_relabel_configs:
+        - regex: {{ include "stormforge-agent.workload.metrics" . }}
+          source_labels: [ __name__ ]
+          action: keep
+      - job_name: prometheus-agent-metrics
+        static_configs:
+        - targets:
+          - "localhost:9090"
+        metric_relabel_configs:
+        - action: keep
+          regex: ^up|scrape_duration_seconds|scrape_samples_post_metric_relabeling|scrape_samples_scraped|scrape_series_added|prometheus_agent_deleted_series|prometheus_remote.*|prometheus_agent_active_series$
+          source_labels: [ __name__ ]
+        - action: drop
+          regex: ^prometheus_remote_storage_exemplars$
+          source_labels: [ __name__ ]
