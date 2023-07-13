@@ -779,4 +779,20 @@ entries:
     urls:
     - https://github.com/thestormforge/helm-charts/releases/download/optimize-live-0.1.0/optimize-live-0.1.0.tgz
     version: 0.1.0
+  stormforge-agent:
+  - apiVersion: v2
+    appVersion: 2.3.0
+    created: "2023-07-13T21:19:39.175819999Z"
+    description: Bundled StormForge Agent and Prometheus in Agent Mode capturing telemetry for StormForge systems.
+    digest: 26bff2611de41204a5b06b1a78dd8a46b9f3f7e0b55d948b72e1bba5494bf68d
+    home: https://www.stormforge.io/
+    icon: https://app.stormforge.io/img/logo.png
+    kubeVersion: '>= 1.16.x-0'
+    maintainers:
+    - name: grambot
+    name: stormforge-agent
+    type: application
+    urls:
+    - https://github.com/thestormforge/helm-charts/releases/download/stormforge-agent-2.3.0/stormforge-agent-2.3.0.tgz
+    version: 2.3.0
 generated: "2021-11-21T16:19:40.71931458Z"
