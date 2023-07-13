@@ -1,0 +1,133 @@
+##
+# StormForge Agent Settings
+##
+
+### Required Configuration ###
+
+stormforge: {}
+# The following required values will be supplied by `stormforge create auth`.
+#
+# ---
+# stormforge:
+#   address: "https://api.stormforge.io/"
+# authorization:
+#   clientID: "<CLIENT_ID>"
+#   clientSecret: "<CLIENT_SECRET>"
+#   issuer: "https://api.stormforge.io/"
+
+### End Required Configuration ###
+
+# proxyUrl: "https://proxy.example.com"
+# noProxy: "10.76.0.0/16"
+#
+# imagePullSecrets:
+# - name: secret-name
+resetSecret: false
+workload:
+  autoDiscovery: true
+  denyNamespaces:
+  - kube-system
+  - openshift.*
+  # `allowNamespaces` can be used as an alternative to `denyNamespaces`. Note
+  # that `allowNamespaces` and `denyNamespaces` are mututally exclusive; only
+  # one of them may be specified.
+  # `allowNamespaces` takes precedence over `denyNamespaces` in case both are
+  # specified. Regex are allowed on both fields: i.e. `.*-system`
+  allowNamespaces: []
+  # - app-1
+  # - app-2
+  # - monitoring
+
+  debug: false
+  image:
+    repository: registry.stormforge.io/optimize/workload-agent
+    pullPolicy: IfNotPresent
+    tag: "2.3.0"
+  resources: {}
+  # Workload agent requires roughly
+  # - 200m cpu per 1000 pods
+  # - 64M memory per 1000 pods
+  #  requests:
+  #      cpu: 250m
+  #      memory: 100M
+  #    limits:
+  #      cpu: 500m
+  #      memory: 1000M
+
+  # `workloadSyncInterval` sets the interval the agent will perform
+  # a regular sync/heartbeat against the StormForge API
+  # for all active workloads on the cluster.
+  # This is used for garbage collection of the workloads created
+  # on StormForge API
+  # Default is 1h (one hour). it can be in days, hours, min and seconds
+  workloadSyncInterval: 1h
+  # `collectLabels` dictates the agent to retrieve labels of the
+  # cluster's workloads when running on auto discovery mode on.
+  # Default is true.
+  collectLabels: true
+prom:
+  image:
+    repository: prom/prometheus
+    pullPolicy: IfNotPresent
+    tag: v2.45.0
+  resources: {}
+  # Prometheus agent requires roughly
+  # - 100m cpu per 1000 pods
+  # - 250M memory per 1000 pods
+  # requests:
+  #   cpu: 200m
+  #   memory: 100M
+  # limits:
+  #   cpu: 1
+  #   memory: 1000M
+  remoteWriteUrl: "https://in.stormforge.io/prometheus/write"
+  tokenUrl: "https://api.stormforge.io/oauth/token"
+  scrapeTimeout: 8s
+  # These should usually be left at the prometheus defaults (as of 2.44 version)
+  # remoteTimeout: 30s
+  # retentionMaxTime: 2h
+  # retentionMinTime: 5m
+  remoteWriteQueueConfig:
+    retry_on_http_429: true
+    # These should usually be left at the defaults; when using a constrained uplink
+    # it may be worth reducing the sizes from the defaults to something like the following
+    # max_shards: 200
+    # capacity: 2500
+    # max_samples_per_send: 500
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+# Set to true if deplying the StormForge Agent on OpenShift. Default is false.
+openshift: false
+rbac:
+  # If set to false, user needs to handle all rbac needed for agent + workload manager
+  # there is a minimum of rules for metrics required, see template
+  create: true
+  # Leverage k8s "view" role for resources, minimizing RBAC rules needed
+  # and creating an additional clusterrolebinding for the service account
+  useViewRole: true
+  additional: |-
+    # In this section, we add resources that are not usually part of the view role
+    - apiGroups:
+      - monitoring.coreos.com
+      resources:
+      - prometheuses
+      - alertmanagers
+      verbs:
+      - get
+      - list
+      - watch
+    - apiGroups:
+      - optimize.stormforge.io
+      resources:
+      - lives
+      verbs:
+      - get
+      - list
+      - watch
+# Volume for WAL
+storageVolumeSize: 2G
+nodeSelector: {}
+tolerations: []
+affinity: {}

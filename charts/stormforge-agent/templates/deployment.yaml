@@ -1,0 +1,140 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "stormforge-agent.fullname" . }}
+  labels:
+    {{- include "stormforge-agent.labels" . | nindent 4 }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "stormforge-agent.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "stormforge-agent.selectorLabels" . | nindent 8 }}
+      annotations:
+        configmapChecksum: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    spec:
+      serviceAccountName: {{ include "stormforge-agent.serviceAccountName" . }}
+      {{- if .Values.imagePullSecrets }}
+      {{- dict "imagePullSecrets" .Values.imagePullSecrets | toYaml | nindent 6 }}
+      {{- end }}
+      containers:
+      - name: workload-agent
+        image: "{{ .Values.workload.image.repository }}:{{ .Values.workload.image.tag | default .Chart.Version }}"
+        imagePullPolicy: {{ .Values.workload.image.pullPolicy }}
+        envFrom:
+        - secretRef:
+            name: {{ include "stormforge-agent.fullname" . }}
+        env:
+        - name: CHART_VERSION
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['helm.sh/chart']
+        args:
+        - --config=/etc/config/workload-agent.yml
+        {{- if .Values.workload.debug }}
+        - --v=5
+        {{- end }}
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/config
+        resources:
+          {{- toYaml .Values.workload.resources | nindent 10 }}
+      - name: prom-agent
+        image: "{{ .Values.prom.image.repository }}:{{ .Values.prom.image.tag }}"
+        imagePullPolicy: {{ .Values.prom.image.pullPolicy }}
+        envFrom:
+        - secretRef:
+            name: {{ include "stormforge-agent.fullname" . }}
+        args:
+        - --enable-feature=agent
+        {{- if .Values.workload.debug }}
+        - --log.level=debug
+        {{- end }}
+        {{- if .Values.prom.retentionMaxTime }}
+        - --storage.agent.retention.max-time={{ .Values.prom.retentionMaxTime }}
+        {{- end }}
+        {{- if .Values.prom.retentionMinTime }}
+        - --storage.agent.retention.min-time={{ .Values.prom.retentionMinTime }}
+        {{- end }}
+        - --config.file=/etc/config/prometheus.yml
+        - --web.enable-lifecycle
+        ports:
+        - name: agent
+          containerPort: 9090
+        resources:
+          {{- toYaml .Values.prom.resources | nindent 10 }}
+        readinessProbe:
+          httpGet:
+            path: /-/ready
+            port: 9090
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 30
+          failureThreshold: 3
+          successThreshold: 1
+        livenessProbe:
+          httpGet:
+            path: /-/healthy
+            port: 9090
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          timeoutSeconds: 30
+          failureThreshold: 3
+          successThreshold: 1
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+        - name: storage-volume
+          mountPath: /prometheus/data-agent
+        - name: client-secret-volume
+          mountPath: /mnt
+      securityContext:
+        fsGroup: 65534
+        runAsGroup: 65534
+        runAsNonRoot: true
+        runAsUser: 65534
+      terminationGracePeriodSeconds: 300
+      volumes:
+      - name: config-volume
+        configMap:
+          name: {{ include "stormforge-agent.fullname" . }}
+      - name: storage-volume
+        emptyDir:
+          sizeLimit: "{{ .Values.storageVolumeSize }}"
+      - name: client-secret-volume
+        secret:
+          secretName: {{ include "stormforge-agent.fullname" . }}
+          items:
+          - key: STORMFORGE_CLIENT_SECRET
+            path: client_secret_file
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
